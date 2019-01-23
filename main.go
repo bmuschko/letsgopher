@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bmuschko/lets-gopher-exercise/cmd"
+	"github.com/bmuschko/lets-gopher/cmd"
 )
 
 var (

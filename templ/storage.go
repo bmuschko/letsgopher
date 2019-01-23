@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bmuschko/lets-gopher-exercise/utils"
+	"github.com/bmuschko/lets-gopher/utils"
 	"github.com/mitchellh/go-homedir"
 )
 

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bmuschko/lets-gopher-exercise/utils"
-	git "gopkg.in/src-d/go-git.v4"
+	"github.com/bmuschko/lets-gopher/utils"
+	"gopkg.in/src-d/go-git.v4"
 )
 
 type GitRepo struct {

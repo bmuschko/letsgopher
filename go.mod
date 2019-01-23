@@ -1,4 +1,4 @@
-module github.com/bmuschko/lets-gopher-exercise
+module github.com/bmuschko/lets-gopher
 
 require (
 	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect

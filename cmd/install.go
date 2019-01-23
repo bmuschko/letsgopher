@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/bmuschko/lets-gopher-exercise/remote"
-	"github.com/bmuschko/lets-gopher-exercise/templ"
-	"github.com/bmuschko/lets-gopher-exercise/utils"
+	"github.com/bmuschko/lets-gopher/remote"
+	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/utils"
 	"github.com/spf13/cobra"
 )
 

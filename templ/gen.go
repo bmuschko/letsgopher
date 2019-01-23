@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bmuschko/lets-gopher-exercise/utils"
+	"github.com/bmuschko/lets-gopher/utils"
 )
 
 func GenerateProject(templatePath string, goHomeBasePath string) {
