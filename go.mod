@@ -1,23 +1,14 @@
 module github.com/bmuschko/lets-gopher
 
 require (
-	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect
-	github.com/emirpasic/gods v1.12.0 // indirect
-	github.com/hinshun/vt10x v0.0.0-20180809195222-d55458df857c // indirect
+	github.com/ghodss/yaml v1.0.0
+	github.com/gosuri/uitable v0.0.0-20160404203958-36ee7e946282
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/mattn/go-colorable v0.0.9 // indirect
-	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
+	github.com/kr/pretty v0.1.0 // indirect
+	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3 // indirect
-	github.com/stretchr/testify v1.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc // indirect
-	golang.org/x/net v0.0.0-20190119204137-ed066c81e75e // indirect
-	golang.org/x/sys v0.0.0-20190123074212-c6b37f3e9285 // indirect
-	gopkg.in/AlecAivazis/survey.v1 v1.7.1
-	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
-	gopkg.in/src-d/go-git.v4 v4.8.1
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	gopkg.in/yaml.v2 v2.2.2 // indirect
 )

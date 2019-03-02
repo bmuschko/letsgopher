@@ -8,9 +8,9 @@ import (
 var version string
 
 var versionCmd = &cobra.Command{
-	Use: "version",
+	Use:   "version",
 	Short: "print the version number and exit",
-	Run: printVersion,
+	Run:   printVersion,
 }
 
 func init() {
@@ -22,5 +22,5 @@ func SetVersion(v string) {
 }
 
 func printVersion(cmd *cobra.Command, args []string) {
-	fmt.Printf("let's gopher %s\n", version)
+	fmt.Printf("letsgopher %s\n", version)
 }
