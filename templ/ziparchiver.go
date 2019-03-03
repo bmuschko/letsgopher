@@ -2,28 +2,25 @@ package templ
 
 import (
 	"archive/zip"
-	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
+	"text/template"
 )
 
 type ZIPArchiver struct {
-	Home Home
 }
 
-func (a *ZIPArchiver) Extract(src, dest string) (string, error) {
+func (a *ZIPArchiver) Extract(src string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer func() {
 		if err := r.Close(); err != nil {
 			panic(err)
 		}
 	}()
-
-	templateDir := filepath.Join(a.Home.TemplatesDir())
-	os.MkdirAll(templateDir, 0755)
 
 	extractAndWriteFile := func(f *zip.File) error {
 		rc, err := f.Open()
@@ -36,13 +33,11 @@ func (a *ZIPArchiver) Extract(src, dest string) (string, error) {
 			}
 		}()
 
-		path := filepath.Join(templateDir, f.Name)
-
 		if f.FileInfo().IsDir() {
-			os.MkdirAll(path, f.Mode())
+			os.MkdirAll(f.Name, f.Mode())
 		} else {
-			os.MkdirAll(filepath.Dir(path), f.Mode())
-			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+			os.MkdirAll(filepath.Dir(f.Name), f.Mode())
+			f, err := os.OpenFile(f.Name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
 				return err
 			}
@@ -52,10 +47,24 @@ func (a *ZIPArchiver) Extract(src, dest string) (string, error) {
 				}
 			}()
 
-			_, err = io.Copy(f, rc)
+			replacements := make(map[string]string)
+			replacements["Module"] = "github.com/bmuschko/hello"
+			b, err := ioutil.ReadAll(rc)
 			if err != nil {
-				return err
+				return nil
 			}
+			tmpl, err := template.New(f.Name()).Parse(string(b))
+			if err != nil {
+				return nil
+			}
+			err = tmpl.ExecuteTemplate(f, f.Name(), replacements)
+			if err != nil {
+				return nil
+			}
+			//_, err = io.Copy(f, rc)
+			//if err != nil {
+			//	return err
+			//}
 		}
 		return nil
 	}
@@ -63,7 +72,7 @@ func (a *ZIPArchiver) Extract(src, dest string) (string, error) {
 	for _, f := range r.File {
 		err := extractAndWriteFile(f)
 		if err != nil {
-			return "", err
+			return err
 		}
 	}
 
@@ -72,5 +81,5 @@ func (a *ZIPArchiver) Extract(src, dest string) (string, error) {
 	//if err != nil {
 	//	return "", nil
 	//}
-	return "", nil
+	return nil
 }

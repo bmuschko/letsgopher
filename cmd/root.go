@@ -11,7 +11,6 @@ var rootCmd = &cobra.Command{
 	Use:   "letsgopher",
 	Short: "Letsgopher is a project generator for Golang projects",
 	Long:  "A flexible and customizable project generator for Golang projects.",
-	Run:   doGenerateCmd,
 }
 
 func Execute() {

@@ -13,9 +13,9 @@ type TemplatesFile struct {
 }
 
 type Template struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	URL     string `json:"origin"`
+	Name        string `json:"name"`
+	Version     string `json:"version"`
+	ArchivePath string `json:"archivePath"`
 }
 
 func NewTemplatesFile() *TemplatesFile {

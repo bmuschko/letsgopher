@@ -1,9 +1,66 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/spf13/cobra"
+	"io"
+	"os"
+	"path"
+)
 
-func doGenerateCmd(cmd *cobra.Command, args []string) {
+func init() {
+	rootCmd.AddCommand(newCreateCmd(rootCmd.OutOrStderr()))
+}
 
+type projectCreateCmd struct {
+	templateName    string
+	templateVersion string
+	targetDir       string
+	out             io.Writer
+	home            templ.Home
+}
+
+func newCreateCmd(out io.Writer) *cobra.Command {
+	create := &projectCreateCmd{out: out}
+
+	cmd := &cobra.Command{
+		Use:   "create [ARGS]",
+		Short: "create a new project from a template",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := checkArgsLength(len(args), "the template name", "the template version", "the target project directory"); err != nil {
+				return err
+			}
+
+			create.templateName = args[0]
+			create.templateVersion = args[1]
+			create.targetDir = args[2]
+			create.home = templ.LetsGopherSettings.Home
+			return create.run()
+		},
+	}
+
+	return cmd
+}
+
+func (a *projectCreateCmd) run() error {
+	f, err := templ.LoadTemplatesFile(a.home.TemplatesFile())
+	if err != nil {
+		return err
+	}
+	if !f.Has(a.templateName) {
+		return fmt.Errorf("Template with name %s hasn't been installed", a.templateName)
+	}
+
+	templateName := a.templateName + "-" + a.templateVersion
+	templateZIP := path.Join(a.home.DownloadsDir(), templateName+".zip")
+	archiver := &templ.ZIPArchiver{}
+	err = archiver.Extract(templateZIP)
+	if err != nil {
+		return nil
+	}
+	err = os.Rename(templateName, a.targetDir)
+	return err
 }
 
 //func doGenerateCmd(cmd *cobra.Command, args []string) {

@@ -8,8 +8,8 @@ import (
 var version string
 
 var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "print the version number and exit",
+	Use:   "templateVersion",
+	Short: "print the templateVersion number and exit",
 	Run:   printVersion,
 }
 

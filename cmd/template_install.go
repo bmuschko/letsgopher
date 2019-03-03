@@ -42,21 +42,14 @@ func (a *templateInstallCmd) run() error {
 		return nil
 	}
 
-	archiver := &templ.ZIPArchiver{Home: templ.LetsGopherSettings.Home}
-	err = archiver.Extract(templateZIP, a.name)
-
-	if err != nil {
-		return nil
-	}
-
-	if err := addTemplate(a.name, a.URL, a.home); err != nil {
+	if err := addTemplate(a.name, templateZIP, a.home); err != nil {
 		return err
 	}
 	fmt.Fprintf(a.out, "%q has been added to your templates\n", a.name)
 	return nil
 }
 
-func addTemplate(name string, url string, home templ.Home) error {
+func addTemplate(name string, templateZIP string, home templ.Home) error {
 	f, err := templ.LoadTemplatesFile(home.TemplatesFile())
 	if err != nil {
 		return err
@@ -67,8 +60,8 @@ func addTemplate(name string, url string, home templ.Home) error {
 	}
 
 	c := templ.Template{
-		Name: name,
-		URL:  url,
+		Name:        name,
+		ArchivePath: templateZIP,
 	}
 	f.Update(&c)
 

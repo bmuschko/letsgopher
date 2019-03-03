@@ -38,9 +38,9 @@ func (a *templateListCmd) run() error {
 		return errors.New("No templates installed")
 	}
 	table := uitable.New()
-	table.AddRow("NAME", "VERSION", "ORIGIN")
+	table.AddRow("NAME", "VERSION", "ARCHIVE PATH")
 	for _, te := range f.Templates {
-		table.AddRow(te.Name, te.Version, te.URL)
+		table.AddRow(te.Name, te.Version, te.ArchivePath)
 	}
 	fmt.Fprintln(a.out, table)
 	return nil

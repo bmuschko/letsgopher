@@ -38,6 +38,11 @@ func (g *HTTPGetter) get(href string) (*bytes.Buffer, error) {
 		return buf, fmt.Errorf("Failed to fetch %s : %s", href, resp.Status)
 	}
 
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			panic(err)
+		}
+	}()
 	_, err = io.Copy(buf, resp.Body)
 	resp.Body.Close()
 	return buf, err
