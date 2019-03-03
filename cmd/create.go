@@ -55,6 +55,13 @@ func (a *projectCreateCmd) run() error {
 	templateName := a.templateName + "-" + a.templateVersion
 	templateZIP := path.Join(a.home.DownloadsDir(), templateName+".zip")
 	archiver := &templ.ZIPArchiver{}
+
+	tmpl, err := archiver.LoadFile(templateZIP)
+	if err != nil {
+		return err
+	}
+	fmt.Print(tmpl)
+
 	err = archiver.Extract(templateZIP)
 	if err != nil {
 		return nil

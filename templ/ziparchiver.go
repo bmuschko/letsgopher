@@ -2,7 +2,11 @@ package templ
 
 import (
 	"archive/zip"
+	"bytes"
+	"errors"
+	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -82,4 +86,29 @@ func (a *ZIPArchiver) Extract(src string) error {
 	//	return "", nil
 	//}
 	return nil
+}
+
+func (a *ZIPArchiver) LoadFile(src string) (string, error) {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
+
+		if filepath.Base(f.Name) == "template.yaml" {
+			rc, err := f.Open()
+			if err != nil {
+				return "", nil
+			}
+			b := bytes.NewBuffer(nil)
+			_, err = io.Copy(b, rc)
+			return string(b.Bytes()), err
+		}
+	}
+	return "", errors.New("could not locate template.yaml file")
 }
