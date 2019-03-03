@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/spf13/cobra"
+	"gopkg.in/AlecAivazis/survey.v1"
+	"gopkg.in/AlecAivazis/survey.v1/core"
 	"io"
 	"os"
 	"path"
@@ -56,18 +58,45 @@ func (a *projectCreateCmd) run() error {
 	templateZIP := path.Join(a.home.DownloadsDir(), templateName+".zip")
 	archiver := &templ.ZIPArchiver{}
 
-	tmpl, err := archiver.LoadFile(templateZIP)
+	tb, err := archiver.LoadFile(templateZIP)
 	if err != nil {
 		return err
 	}
-	fmt.Print(tmpl)
+	m, err := templ.LoadManifestData(tb)
+	if err != nil {
+		return err
+	}
+	r, err := requestParameterValues(m.Parameters)
+	if err != nil {
+		return err
+	}
 
-	err = archiver.Extract(templateZIP)
+	err = archiver.Extract(templateZIP, r)
 	if err != nil {
 		return nil
 	}
 	err = os.Rename(templateName, a.targetDir)
 	return err
+}
+
+func requestParameterValues(params []*templ.Parameter) (map[string]string, error) {
+	replacements := make(map[string]string)
+	if len(params) > 0 {
+		core.SetFancyIcons()
+	}
+	for _, p := range params {
+		value := ""
+		prompt := &survey.Input{
+			Message: "Please enter " + p.Description,
+		}
+		err := survey.AskOne(prompt, &value, survey.MinLength(1))
+		if err != nil {
+			return nil, err
+		}
+		replacements[p.Name] = value
+	}
+
+	return replacements, nil
 }
 
 //func doGenerateCmd(cmd *cobra.Command, args []string) {

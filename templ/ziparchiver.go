@@ -15,7 +15,7 @@ import (
 type ZIPArchiver struct {
 }
 
-func (a *ZIPArchiver) Extract(src string) error {
+func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		return err
@@ -51,8 +51,6 @@ func (a *ZIPArchiver) Extract(src string) error {
 				}
 			}()
 
-			replacements := make(map[string]string)
-			replacements["Module"] = "github.com/bmuschko/hello"
 			b, err := ioutil.ReadAll(rc)
 			if err != nil {
 				return nil
@@ -88,7 +86,7 @@ func (a *ZIPArchiver) Extract(src string) error {
 	return nil
 }
 
-func (a *ZIPArchiver) LoadFile(src string) (string, error) {
+func (a *ZIPArchiver) LoadFile(src string) ([]byte, error) {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		log.Fatal(err)
@@ -100,15 +98,15 @@ func (a *ZIPArchiver) LoadFile(src string) (string, error) {
 			continue
 		}
 
-		if filepath.Base(f.Name) == "template.yaml" {
+		if filepath.Base(f.Name) == "manifest.yaml" {
 			rc, err := f.Open()
 			if err != nil {
-				return "", nil
+				return nil, nil
 			}
 			b := bytes.NewBuffer(nil)
 			_, err = io.Copy(b, rc)
-			return string(b.Bytes()), err
+			return b.Bytes(), err
 		}
 	}
-	return "", errors.New("could not locate template.yaml file")
+	return nil, errors.New("could not locate manifest.yaml file")
 }
