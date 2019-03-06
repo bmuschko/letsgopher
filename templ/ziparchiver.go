@@ -40,6 +40,9 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error 
 		if f.FileInfo().IsDir() {
 			os.MkdirAll(f.Name, f.Mode())
 		} else {
+			if filepath.Base(f.Name) == "manifest.yaml" {
+				return nil
+			}
 			os.MkdirAll(filepath.Dir(f.Name), f.Mode())
 			f, err := os.OpenFile(f.Name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
