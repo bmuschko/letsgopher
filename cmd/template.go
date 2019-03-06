@@ -18,5 +18,6 @@ func newTemplateCmd(out io.Writer) *cobra.Command {
 	cmd.AddCommand(newTemplateInstallCmd(out))
 	cmd.AddCommand(newTemplateUninstallCmd(out))
 	cmd.AddCommand(newTemplateListCmd(out))
+	cmd.AddCommand(newTemplateInspectCmd(out))
 	return cmd
 }
