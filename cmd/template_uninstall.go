@@ -41,7 +41,7 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 }
 
 func (r *templateUninstallCmd) run() error {
-	templateDir := filepath.Join(r.home.TemplatesDir(), r.name)
+	templateDir := filepath.Join(r.home.ArchiveDir(), r.name)
 	err := os.RemoveAll(templateDir)
 
 	if err != nil {

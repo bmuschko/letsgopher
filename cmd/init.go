@@ -52,12 +52,7 @@ func (i *initCmd) run() error {
 }
 
 func (i *initCmd) createHomeDirs() error {
-	err := createDirIfNotExist(i.home.TemplatesDir())
-	if err != nil {
-		return err
-	}
-
-	err = createDirIfNotExist(i.home.DownloadsDir())
+	err := createDirIfNotExist(i.home.ArchiveDir())
 	if err != nil {
 		return err
 	}

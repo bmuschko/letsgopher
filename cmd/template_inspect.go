@@ -45,7 +45,7 @@ func (a *templateInspectCmd) run() error {
 	}
 
 	templateName := a.templateName + "-" + a.templateVersion
-	templateZIP := path.Join(a.home.DownloadsDir(), templateName+".zip")
+	templateZIP := path.Join(a.home.ArchiveDir(), templateName+".zip")
 	archiver := &templ.ZIPArchiver{}
 
 	tb, err := archiver.LoadFile(templateZIP)

@@ -20,16 +20,12 @@ func (h Home) String() string {
 	return os.ExpandEnv(string(h))
 }
 
-func (h Home) TemplatesDir() string {
-	return h.Path("templates")
+func (h Home) ArchiveDir() string {
+	return h.Path("archive")
 }
 
 func (h Home) TemplatesFile() string {
-	return h.Path("templates", "templates.yaml")
-}
-
-func (h Home) DownloadsDir() string {
-	return h.Path("downloads")
+	return h.Path("templates.yaml")
 }
 
 func (h Home) Path(elem ...string) string {

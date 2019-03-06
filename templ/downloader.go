@@ -17,7 +17,7 @@ func (c *TemplateDownloader) DownloadTo(url, dest string) (string, error) {
 		return "", err
 	}
 
-	destfile := filepath.Join(c.Home.DownloadsDir(), extractTemplateName(url))
+	destfile := filepath.Join(c.Home.ArchiveDir(), extractTemplateName(url))
 	if err := ioutil.WriteFile(destfile, data.Bytes(), 0644); err != nil {
 		return "", err
 	}
