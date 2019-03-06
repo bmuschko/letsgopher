@@ -30,7 +30,7 @@ func validateExt(url string) error {
 	ext := path.Ext(url)
 
 	if ext != "" || ext != ".zip" {
-		return fmt.Errorf("URL  %s needs to point to ZIP file: %s", url)
+		return fmt.Errorf("URL %s needs to point to a ZIP file", url)
 	}
 
 	return nil
@@ -43,7 +43,7 @@ func validateVersion(url string) error {
 	fullTemplateName := string(r[lastDotSlash:lastDotIndex])
 
 	if !strings.Contains(fullTemplateName, "-") {
-		return fmt.Errorf("Template %s does not contain hypen character to separate name from version", fullTemplateName)
+		return fmt.Errorf("template %s does not contain hypen character to separate name from version", fullTemplateName)
 	}
 
 	return nil

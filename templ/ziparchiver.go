@@ -3,13 +3,16 @@ package templ
 import (
 	"archive/zip"
 	"bytes"
-	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"text/template"
+)
+
+const (
+	manifestFile = "manifest.yaml"
 )
 
 type ZIPArchiver struct {
@@ -38,12 +41,18 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error 
 		}()
 
 		if f.FileInfo().IsDir() {
-			os.MkdirAll(f.Name, f.Mode())
+			err := os.MkdirAll(f.Name, f.Mode())
+			if err != nil {
+				return err
+			}
 		} else {
-			if filepath.Base(f.Name) == "manifest.yaml" {
+			if filepath.Base(f.Name) == manifestFile {
 				return nil
 			}
-			os.MkdirAll(filepath.Dir(f.Name), f.Mode())
+			err := os.MkdirAll(filepath.Dir(f.Name), f.Mode())
+			if err != nil {
+				return err
+			}
 			f, err := os.OpenFile(f.Name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
 				return err
@@ -58,18 +67,10 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error 
 			if err != nil {
 				return nil
 			}
-			tmpl, err := template.New(f.Name()).Parse(string(b))
+			err = processAsTemplate(b, f, replacements)
 			if err != nil {
 				return nil
 			}
-			err = tmpl.ExecuteTemplate(f, f.Name(), replacements)
-			if err != nil {
-				return nil
-			}
-			//_, err = io.Copy(f, rc)
-			//if err != nil {
-			//	return err
-			//}
 		}
 		return nil
 	}
@@ -81,35 +82,49 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error 
 		}
 	}
 
-	//templateDir := filepath.Join(a.Home.TemplatesDir(), dest)
-	//err := archiver.Unarchive(src, templateDir)
-	//if err != nil {
-	//	return "", nil
-	//}
+	return nil
+}
+
+func processAsTemplate(b []byte, f *os.File, replacements map[string]string) error {
+	tmpl, err := template.New(f.Name()).Parse(string(b))
+	if err != nil {
+		return nil
+	}
+	err = tmpl.ExecuteTemplate(f, f.Name(), replacements)
+	if err != nil {
+		return nil
+	}
 	return nil
 }
 
 func (a *ZIPArchiver) LoadFile(src string) ([]byte, error) {
 	r, err := zip.OpenReader(src)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	defer r.Close()
+	defer func() {
+		if err := r.Close(); err != nil {
+			panic(err)
+		}
+	}()
 
 	for _, f := range r.File {
 		if f.FileInfo().IsDir() {
 			continue
 		}
 
-		if filepath.Base(f.Name) == "manifest.yaml" {
+		if filepath.Base(f.Name) == manifestFile {
 			rc, err := f.Open()
 			if err != nil {
-				return nil, nil
+				return nil, err
 			}
 			b := bytes.NewBuffer(nil)
 			_, err = io.Copy(b, rc)
+			if err != nil {
+				return nil, err
+			}
 			return b.Bytes(), err
 		}
 	}
-	return nil, errors.New("could not locate manifest.yaml file")
+	return nil, fmt.Errorf("could not locate %s file", manifestFile)
 }

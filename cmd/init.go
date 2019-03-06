@@ -26,7 +26,7 @@ func newInitCmd(out io.Writer) *cobra.Command {
 		Short: "initialize letsgopher",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 0 {
-				return errors.New("This command does not accept arguments")
+				return errors.New("this command does not accept arguments")
 			}
 			i.home = templ.LetsGopherSettings.Home
 			return i.run()

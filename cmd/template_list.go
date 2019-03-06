@@ -35,7 +35,7 @@ func (a *templateListCmd) run() error {
 		return err
 	}
 	if len(f.Templates) == 0 {
-		return errors.New("No templates installed")
+		return errors.New("no templates installed")
 	}
 	table := uitable.New()
 	table.AddRow("NAME", "VERSION", "ARCHIVE PATH")

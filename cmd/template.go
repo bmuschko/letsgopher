@@ -11,8 +11,8 @@ func init() {
 
 func newTemplateCmd(out io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "template [FLAGS] install|uninstall|list [ARGS]",
-		Short: "install, uninstall, list template",
+		Use:   "template [FLAGS] install|uninstall|list|inspect [ARGS]",
+		Short: "install, uninstall, list, inspect template",
 	}
 
 	cmd.AddCommand(newTemplateInstallCmd(out))

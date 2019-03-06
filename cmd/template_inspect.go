@@ -41,7 +41,7 @@ func (a *templateInspectCmd) run() error {
 		return err
 	}
 	if !f.Has(a.templateName) {
-		return fmt.Errorf("Template with name %s hasn't been installed", a.templateName)
+		return fmt.Errorf("template with name %s hasn't been installed", a.templateName)
 	}
 
 	templateName := a.templateName + "-" + a.templateVersion
