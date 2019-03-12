@@ -37,7 +37,10 @@ func newInitCmd(out io.Writer) *cobra.Command {
 }
 
 func (i *initCmd) run() error {
-	i.createHomeDirs()
+	err := i.createHomeDirs()
+	if err != nil {
+		return nil
+	}
 	templatesFile := i.home.TemplatesFile()
 	if fi, err := os.Stat(templatesFile); err != nil {
 		fmt.Fprintf(i.out, "Creating %s \n", templatesFile)
@@ -54,7 +57,7 @@ func (i *initCmd) run() error {
 func (i *initCmd) createHomeDirs() error {
 	err := createDirIfNotExist(i.home.ArchiveDir())
 	if err != nil {
-		return err
+		return fmt.Errorf("could not create %s: %s", i.home.ArchiveDir(), err)
 	}
 
 	return nil

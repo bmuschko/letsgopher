@@ -29,7 +29,7 @@ func (t TemplateURLVerifier) Verify() error {
 func validateExt(url string) error {
 	ext := path.Ext(url)
 
-	if ext != "" || ext != ".zip" {
+	if ext != ".zip" {
 		return fmt.Errorf("URL %s needs to point to a ZIP file", url)
 	}
 
