@@ -1,6 +1,7 @@
 module github.com/bmuschko/lets-gopher
 
 require (
+	github.com/blang/semver v3.5.1+incompatible
 	github.com/ghodss/yaml v1.0.0
 	github.com/gosuri/uitable v0.0.0-20160404203958-36ee7e946282
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect

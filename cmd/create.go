@@ -50,8 +50,8 @@ func (a *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
-	if !f.Has(a.templateName) {
-		return fmt.Errorf("template with name %s hasn't been installed", a.templateName)
+	if !f.Has(a.templateName, a.templateVersion) {
+		return fmt.Errorf("template with name %s and version %s hasn't been installed", a.templateName, a.templateVersion)
 	}
 
 	templateName := a.templateName + "-" + a.templateVersion

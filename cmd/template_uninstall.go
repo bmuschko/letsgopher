@@ -10,30 +10,27 @@ import (
 )
 
 type templateUninstallCmd struct {
-	out  io.Writer
-	name string
-	home templ.Home
+	out     io.Writer
+	name    string
+	version string
+	home    templ.Home
 }
 
 func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 	remove := &templateUninstallCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "uninstall [NAME]",
-		Short: "uninstall a template",
+		Use:   "uninstall [NAME] [VERSION]",
+		Short: "uninstall a template with a given name and version",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
-				return fmt.Errorf("need at least one argument, name of template")
+			if err := checkArgsLength(len(args), "the template name", "the template version"); err != nil {
+				return err
 			}
 
+			remove.name = args[0]
+			remove.version = args[1]
 			remove.home = templ.LetsGopherSettings.Home
-			for i := 0; i < len(args); i++ {
-				remove.name = args[i]
-				if err := remove.run(); err != nil {
-					return err
-				}
-			}
-			return nil
+			return remove.run()
 		},
 	}
 

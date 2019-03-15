@@ -40,9 +40,9 @@ func LoadTemplatesFile(path string) (*TemplatesFile, error) {
 	return r, nil
 }
 
-func (r *TemplatesFile) Has(name string) bool {
+func (r *TemplatesFile) Has(name string, version string) bool {
 	for _, rf := range r.Templates {
-		if rf.Name == name {
+		if rf.Name == name && rf.Version == version {
 			return true
 		}
 	}

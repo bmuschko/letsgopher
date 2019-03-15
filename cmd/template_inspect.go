@@ -19,8 +19,8 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 	inspect := &templateInspectCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "inspect [NAME]",
-		Short: "inspects a template with a given templateName",
+		Use:   "inspect [NAME] [VERSION]",
+		Short: "inspects a template with a given name and version",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := checkArgsLength(len(args), "the template name", "the template version"); err != nil {
 				return err
@@ -40,8 +40,8 @@ func (a *templateInspectCmd) run() error {
 	if err != nil {
 		return err
 	}
-	if !f.Has(a.templateName) {
-		return fmt.Errorf("template with name %s hasn't been installed", a.templateName)
+	if !f.Has(a.templateName, a.templateVersion) {
+		return fmt.Errorf("template with name %s and version %s hasn't been installed", a.templateName, a.templateVersion)
 	}
 
 	templateName := a.templateName + "-" + a.templateVersion
