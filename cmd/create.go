@@ -89,7 +89,10 @@ func requestParameterValues(params []*templ.Parameter) (map[string]string, error
 		prompt := &survey.Input{
 			Message: "Please enter " + p.Description,
 		}
-		err := survey.AskOne(prompt, &value, survey.MinLength(1))
+		if p.DefaultValue != "" {
+			prompt.Default = p.DefaultValue
+		}
+		err := survey.AskOne(prompt, &value, survey.Required)
 		if err != nil {
 			return nil, err
 		}
