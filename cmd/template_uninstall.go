@@ -37,25 +37,26 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 }
 
 func (r *templateUninstallCmd) run() error {
-	err := deleteTemplateArchiveFile(r)
+	templatesFile := r.home.TemplatesFile()
+	f, err := templ.LoadTemplatesFile(templatesFile)
 	if err != nil {
 		return err
 	}
-	return removeTemplateLine(r.out, r.name, r.home)
+
+	err = deleteTemplateArchiveFile(f, r.name, r.version)
+	if err != nil {
+		return err
+	}
+	return removeTemplateLine(f, templatesFile, r.out, r.name)
 }
 
-func deleteTemplateArchiveFile(r *templateUninstallCmd) error {
-	f, err := templ.LoadTemplatesFile(r.home.TemplatesFile())
-	if err != nil {
-		return err
-	}
-
-	template := f.Get(r.name, r.version)
+func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, templateVersion string) error {
+	template := f.Get(templateName, templateVersion)
 	if template == nil {
-		return fmt.Errorf("template with name %s and version %s hasn't been installed", r.name, r.version)
+		return fmt.Errorf("template with name %s and version %s hasn't been installed", templateName, templateVersion)
 	}
 
-	err = os.RemoveAll(template.ArchivePath)
+	err := os.RemoveAll(template.ArchivePath)
 	if err != nil {
 		return fmt.Errorf("can't delete template archive %q", template.ArchivePath)
 	}
@@ -63,21 +64,15 @@ func deleteTemplateArchiveFile(r *templateUninstallCmd) error {
 	return nil
 }
 
-func removeTemplateLine(out io.Writer, name string, home templ.Home) error {
-	templatesFile := home.TemplatesFile()
-	r, err := templ.LoadTemplatesFile(templatesFile)
-	if err != nil {
+func removeTemplateLine(f *templ.TemplatesFile, templatesFile string, out io.Writer, templateName string) error {
+	if !f.Remove(templateName) {
+		return fmt.Errorf("no template named %q found", templateName)
+	}
+	if err := f.WriteFile(templatesFile, 0644); err != nil {
 		return err
 	}
 
-	if !r.Remove(name) {
-		return fmt.Errorf("no template named %q found", name)
-	}
-	if err := r.WriteFile(templatesFile, 0644); err != nil {
-		return err
-	}
-
-	fmt.Fprintf(out, "%q has been removed from your templates\n", name)
+	fmt.Fprintf(out, "%q has been removed from your templates\n", templateName)
 
 	return nil
 }
