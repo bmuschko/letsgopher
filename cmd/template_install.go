@@ -11,10 +11,10 @@ import (
 )
 
 type templateInstallCmd struct {
-	name string
-	URL  string
-	out  io.Writer
-	home templ.Home
+	templateURL  string
+	templateName string
+	out          io.Writer
+	home         templ.Home
 }
 
 func newTemplateInstallCmd(out io.Writer) *cobra.Command {
@@ -28,8 +28,8 @@ func newTemplateInstallCmd(out io.Writer) *cobra.Command {
 				return err
 			}
 
-			add.URL = args[0]
-			add.name = args[1]
+			add.templateURL = args[0]
+			add.templateName = args[1]
 			add.home = templ.LetsGopherSettings.Home
 			return add.run()
 		},
@@ -38,21 +38,21 @@ func newTemplateInstallCmd(out io.Writer) *cobra.Command {
 }
 
 func (a *templateInstallCmd) run() error {
-	templateVersion, err := extractTemplateVersion(a.URL)
+	templateVersion, err := extractTemplateVersion(a.templateURL)
 	if err != nil {
 		return err
 	}
 	downloader := &templ.TemplateDownloader{Home: templ.LetsGopherSettings.Home, Getter: templ.NewHTTPGetter()}
-	templateZIP, err := downloader.DownloadTo(a.URL, a.name)
+	templateZIP, err := downloader.DownloadTo(a.templateURL, a.templateName)
 
 	if err != nil {
 		return nil
 	}
 
-	if err := addTemplate(a.name, templateVersion, templateZIP, a.home); err != nil {
+	if err := addTemplate(a.templateName, templateVersion, templateZIP, a.home); err != nil {
 		return err
 	}
-	fmt.Fprintf(a.out, "%q has been added to your templates\n", a.name)
+	fmt.Fprintf(a.out, "%q has been added to your templates\n", a.templateName)
 	return nil
 }
 

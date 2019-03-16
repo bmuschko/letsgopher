@@ -9,10 +9,10 @@ import (
 )
 
 type templateUninstallCmd struct {
-	out     io.Writer
-	name    string
-	version string
-	home    templ.Home
+	templateName    string
+	templateVersion string
+	out             io.Writer
+	home            templ.Home
 }
 
 func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
@@ -26,8 +26,8 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 				return err
 			}
 
-			remove.name = args[0]
-			remove.version = args[1]
+			remove.templateName = args[0]
+			remove.templateVersion = args[1]
 			remove.home = templ.LetsGopherSettings.Home
 			return remove.run()
 		},
@@ -43,11 +43,11 @@ func (r *templateUninstallCmd) run() error {
 		return err
 	}
 
-	err = deleteTemplateArchiveFile(f, r.name, r.version)
+	err = deleteTemplateArchiveFile(f, r.templateName, r.templateVersion)
 	if err != nil {
 		return err
 	}
-	return removeTemplateLine(f, templatesFile, r.out, r.name)
+	return removeTemplateLine(f, templatesFile, r.out, r.templateName)
 }
 
 func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, templateVersion string) error {
