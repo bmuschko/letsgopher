@@ -49,6 +49,15 @@ func (r *TemplatesFile) Has(name string, version string) bool {
 	return false
 }
 
+func (r *TemplatesFile) Get(name string, version string) *Template {
+	for _, rf := range r.Templates {
+		if rf.Name == name && rf.Version == version {
+			return rf
+		}
+	}
+	return nil
+}
+
 func (r *TemplatesFile) Add(re ...*Template) {
 	r.Templates = append(r.Templates, re...)
 }

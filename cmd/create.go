@@ -87,7 +87,7 @@ func requestParameterValues(params []*templ.Parameter) (map[string]string, error
 	for _, p := range params {
 		value := ""
 		prompt := &survey.Input{
-			Message: "Please enter " + p.Description,
+			Message: p.Prompt,
 		}
 		if p.DefaultValue != "" {
 			prompt.Default = p.DefaultValue

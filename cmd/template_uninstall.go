@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"io"
 	"os"
-	"path/filepath"
 )
 
 type templateUninstallCmd struct {
@@ -38,14 +37,30 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 }
 
 func (r *templateUninstallCmd) run() error {
-	templateDir := filepath.Join(r.home.ArchiveDir(), r.name)
-	err := os.RemoveAll(templateDir)
-
+	err := deleteTemplateArchiveFile(r)
 	if err != nil {
-		return fmt.Errorf("can't delete template directory %q", templateDir)
+		return err
+	}
+	return removeTemplateLine(r.out, r.name, r.home)
+}
+
+func deleteTemplateArchiveFile(r *templateUninstallCmd) error {
+	f, err := templ.LoadTemplatesFile(r.home.TemplatesFile())
+	if err != nil {
+		return err
 	}
 
-	return removeTemplateLine(r.out, r.name, r.home)
+	template := f.Get(r.name, r.version)
+	if template == nil {
+		return fmt.Errorf("template with name %s and version %s hasn't been installed", r.name, r.version)
+	}
+
+	err = os.RemoveAll(template.ArchivePath)
+	if err != nil {
+		return fmt.Errorf("can't delete template archive %q", template.ArchivePath)
+	}
+
+	return nil
 }
 
 func removeTemplateLine(out io.Writer, name string, home templ.Home) error {

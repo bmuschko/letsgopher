@@ -10,7 +10,7 @@ type ManifestFile struct {
 
 type Parameter struct {
 	Name         string `json:"name"`
-	Label        string `json:"label"`
+	Prompt       string `json:"prompt"`
 	Type         string `json:"type"`
 	Description  string `json:"description"`
 	DefaultValue string `json:"defaultValue"`
