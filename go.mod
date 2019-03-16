@@ -6,6 +6,7 @@ require (
 	github.com/gosuri/uitable v0.0.0-20160404203958-36ee7e946282
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
+	github.com/kr/text v0.1.0
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/spf13/cobra v0.0.3

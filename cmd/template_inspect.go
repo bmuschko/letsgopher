@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/kr/text"
 	"github.com/spf13/cobra"
 	"io"
 	"path"
@@ -54,8 +55,9 @@ func (a *templateInspectCmd) run() error {
 	}
 
 	fmt.Println("template:")
-	fmt.Printf("  - name: \"%s\"\n", a.templateName)
-	fmt.Printf("    version: \"%s\"\n", a.templateVersion)
-	fmt.Print(string(tb))
+	fmt.Printf("  name: \"%s\"\n", a.templateName)
+	fmt.Printf("  version: \"%s\"\n", a.templateVersion)
+	fmt.Println("manifest:")
+	fmt.Print(text.Indent(string(tb), "  "))
 	return nil
 }
