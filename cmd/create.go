@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/manifest"
 	"github.com/spf13/cobra"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/AlecAivazis/survey.v1/core"
@@ -63,7 +64,7 @@ func (a *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
-	m, err := templ.LoadManifestData(tb)
+	m, err := manifest.LoadManifestData(tb)
 	if err != nil {
 		return err
 	}
@@ -80,25 +81,25 @@ func (a *projectCreateCmd) run() error {
 	return err
 }
 
-func requestParameterValues(params []*templ.Parameter) (map[string]interface{}, error) {
+func requestParameterValues(params []*manifest.Parameter) (map[string]interface{}, error) {
 	replacements := make(map[string]interface{})
 	if len(params) > 0 {
 		core.SetFancyIcons()
 	}
 	for _, p := range params {
-		if p.Type == templ.StringType {
+		if p.Type == manifest.StringType {
 			value, err := promptString(p)
 			if err != nil {
 				return nil, err
 			}
 			replacements[p.Name] = value
-		} else if p.Type == templ.IntegerType {
+		} else if p.Type == manifest.IntegerType {
 			value, err := promptInteger(p)
 			if err != nil {
 				return nil, err
 			}
 			replacements[p.Name] = value
-		} else if p.Type == templ.BooleanType {
+		} else if p.Type == manifest.BooleanType {
 			value, err := promptBoolean(p)
 			if err != nil {
 				return nil, err
@@ -112,7 +113,7 @@ func requestParameterValues(params []*templ.Parameter) (map[string]interface{}, 
 	return replacements, nil
 }
 
-func promptString(p *templ.Parameter) (string, error) {
+func promptString(p *manifest.Parameter) (string, error) {
 	value := ""
 	var err error
 
@@ -146,7 +147,7 @@ func promptString(p *templ.Parameter) (string, error) {
 	return value, nil
 }
 
-func promptInteger(p *templ.Parameter) (int, error) {
+func promptInteger(p *manifest.Parameter) (int, error) {
 	value := 0
 	var err error
 
@@ -180,7 +181,7 @@ func promptInteger(p *templ.Parameter) (int, error) {
 	return value, nil
 }
 
-func promptBoolean(p *templ.Parameter) (bool, error) {
+func promptBoolean(p *manifest.Parameter) (bool, error) {
 	value := false
 	prompt := &survey.Confirm{
 		Message: p.Prompt,
