@@ -18,7 +18,7 @@ const (
 type ZIPArchiver struct {
 }
 
-func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error {
+func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) error {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		return err
@@ -85,7 +85,7 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]string) error 
 	return nil
 }
 
-func processAsTemplate(b []byte, f *os.File, replacements map[string]string) error {
+func processAsTemplate(b []byte, f *os.File, replacements map[string]interface{}) error {
 	tmpl, err := template.New(f.Name()).Parse(string(b))
 	if err != nil {
 		return nil

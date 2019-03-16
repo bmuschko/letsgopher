@@ -5,9 +5,15 @@ import (
 	"fmt"
 	"github.com/blang/semver"
 	"github.com/ghodss/yaml"
+	"strconv"
 )
 
-const maxCompatManifestVersion = "1.0.0"
+const (
+	maxCompatManifestVersion = "1.0.0"
+	StringType               = "string"
+	IntegerType              = "integer"
+	BooleanType              = "boolean"
+)
 
 type ManifestFile struct {
 	Version    string       `json:"version"`
@@ -15,11 +21,12 @@ type ManifestFile struct {
 }
 
 type Parameter struct {
-	Name         string `json:"name"`
-	Prompt       string `json:"prompt"`
-	Type         string `json:"type"`
-	Description  string `json:"description"`
-	DefaultValue string `json:"defaultValue"`
+	Name         string   `json:"name"`
+	Prompt       string   `json:"prompt"`
+	Type         string   `json:"type"`
+	Enum         []string `json:"enum"`
+	Description  string   `json:"description"`
+	DefaultValue string   `json:"defaultValue"`
 }
 
 func LoadManifestData(b []byte) (*ManifestFile, error) {
@@ -29,12 +36,24 @@ func LoadManifestData(b []byte) (*ManifestFile, error) {
 		return nil, err
 	}
 
-	err = validateManifestVersion(m.Version)
+	err = validateManifest(m)
 	if err != nil {
 		return nil, err
 	}
 
 	return m, nil
+}
+
+func validateManifest(m *ManifestFile) error {
+	err := validateManifestVersion(m.Version)
+	if err != nil {
+		return err
+	}
+	err = validateManifestParams(m.Parameters)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func validateManifestVersion(version string) error {
@@ -56,5 +75,34 @@ func validateManifestVersion(version string) error {
 		return fmt.Errorf("manifest version needs to be less than %s", maxCompatManifestVersion)
 	}
 
+	return nil
+}
+
+func validateManifestParams(params []*Parameter) error {
+	for _, p := range params {
+		if p.Type == IntegerType {
+			_, err := strconv.Atoi(p.DefaultValue)
+			if err != nil {
+				return err
+			}
+			if p.Enum != nil {
+				for _, e := range p.Enum {
+					_, err := strconv.Atoi(e)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+		if p.Type == BooleanType {
+			_, err := strconv.ParseBool(p.DefaultValue)
+			if err != nil {
+				return err
+			}
+			if p.Enum != nil {
+				return errors.New("boolean type does not allow enums")
+			}
+		}
+	}
 	return nil
 }
