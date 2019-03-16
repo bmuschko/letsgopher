@@ -19,7 +19,7 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 	remove := &templateUninstallCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "uninstall [NAME] [VERSION]",
+		Use:   "uninstall [name] [version]",
 		Short: "uninstall a template with a given name and version",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := checkArgsLength(len(args), "the template name", "the template version"); err != nil {

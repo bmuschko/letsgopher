@@ -21,7 +21,7 @@ func newTemplateInstallCmd(out io.Writer) *cobra.Command {
 	add := &templateInstallCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "install [URL] [NAME]",
+		Use:   "install [url] [name]",
 		Short: "installs a template from a URL",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := checkArgsLength(len(args), "the url of the template archive", "name for the template"); err != nil {

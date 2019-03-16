@@ -11,6 +11,7 @@ import (
 	"os"
 	"path"
 	"strconv"
+	"strings"
 )
 
 func init() {
@@ -21,6 +22,7 @@ type projectCreateCmd struct {
 	templateName    string
 	templateVersion string
 	targetDir       string
+	params          []string
 	out             io.Writer
 	home            templ.Home
 }
@@ -29,7 +31,7 @@ func newCreateCmd(out io.Writer) *cobra.Command {
 	create := &projectCreateCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "create [ARGS]",
+		Use:   "create [args]",
 		Short: "create a new project from a template",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := checkArgsLength(len(args), "the template name", "the template version", "the target project directory"); err != nil {
@@ -44,6 +46,7 @@ func newCreateCmd(out io.Writer) *cobra.Command {
 		},
 	}
 
+	cmd.PersistentFlags().StringSliceVar(&create.params, "param", []string{}, "parameter defined as key/value pair separated by = character")
 	return cmd
 }
 
@@ -68,7 +71,11 @@ func (a *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
-	r, err := requestParameterValues(m.Parameters)
+	userDefinedParams, err := mapUserDefinedParams(a.params)
+	if err != nil {
+		return err
+	}
+	r, err := requestParameterValues(userDefinedParams, m.Parameters)
 	if err != nil {
 		return err
 	}
@@ -81,12 +88,35 @@ func (a *projectCreateCmd) run() error {
 	return err
 }
 
-func requestParameterValues(params []*manifest.Parameter) (map[string]interface{}, error) {
+func mapUserDefinedParams(params []string) (map[string]string, error) {
+	userDefinedParams := make(map[string]string)
+	for _, p := range params {
+		if !strings.Contains(p, "=") {
+			return nil, fmt.Errorf("user-defined parameter %s does not separate key and value by = character")
+		}
+		s := strings.Split(p, "=")
+		fmt.Println(s[0])
+		fmt.Println(s[1])
+		userDefinedParams[s[0]] = s[1]
+	}
+	return userDefinedParams, nil
+}
+
+func requestParameterValues(userDefinedParams map[string]string, manifestParams []*manifest.Parameter) (map[string]interface{}, error) {
 	replacements := make(map[string]interface{})
-	if len(params) > 0 {
+	if len(manifestParams) > 0 {
 		core.SetFancyIcons()
 	}
-	for _, p := range params {
+	for _, p := range manifestParams {
+		if value, exist := userDefinedParams[p.Name]; exist {
+			if p.Enum != nil && !contains(p.Enum, value) {
+				return nil, fmt.Errorf("provided value '%s' is not defined in enum [%s]",
+					value, strings.Join(p.Enum, ", "))
+			}
+			replacements[p.Name] = value
+			continue
+		}
+
 		if p.Type == manifest.StringType {
 			value, err := promptString(p)
 			if err != nil {
@@ -111,6 +141,15 @@ func requestParameterValues(params []*manifest.Parameter) (map[string]interface{
 	}
 
 	return replacements, nil
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
 
 func promptString(p *manifest.Parameter) (string, error) {

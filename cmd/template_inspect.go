@@ -20,7 +20,7 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 	inspect := &templateInspectCmd{out: out}
 
 	cmd := &cobra.Command{
-		Use:   "inspect [NAME] [VERSION]",
+		Use:   "inspect [name] [version]",
 		Short: "inspects a template with a given name and version",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := checkArgsLength(len(args), "the template name", "the template version"); err != nil {
