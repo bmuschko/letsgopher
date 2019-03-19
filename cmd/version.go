@@ -1,26 +1,50 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
+	"io"
 )
 
+const appLabel = "letsgopher"
+
 var version string
-
-var versionCmd = &cobra.Command{
-	Use:   "templateVersion",
-	Short: "print the templateVersion number and exit",
-	Run:   printVersion,
-}
-
-func init() {
-	rootCmd.AddCommand(versionCmd)
-}
 
 func SetVersion(v string) {
 	version = v
 }
 
-func printVersion(cmd *cobra.Command, args []string) {
-	fmt.Printf("letsgopher %s\n", version)
+func init() {
+	rootCmd.AddCommand(newVersionCmd(rootCmd.OutOrStderr()))
+}
+
+type versionCmd struct {
+	out io.Writer
+}
+
+func newVersionCmd(out io.Writer) *cobra.Command {
+	version := &versionCmd{
+		out: out,
+	}
+
+	versionCmd := &cobra.Command{
+		Use:   "version",
+		Short: "print the version number and exit",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 0 {
+				return errors.New("this command does not accept arguments")
+			}
+			return version.run()
+		},
+	}
+	return versionCmd
+}
+
+func (v *versionCmd) run() error {
+	_, err := fmt.Fprintf(v.out, "%s %s\n", appLabel, version)
+	if err != nil {
+		return err
+	}
+	return nil
 }
