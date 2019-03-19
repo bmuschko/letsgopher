@@ -14,17 +14,19 @@ func TestUndefinedVersion(t *testing.T) {
 		out: b,
 	}
 	err := version.run()
+
 	assert.Nil(t, err)
 	assert.Equal(t, "letsgopher \n", b.String())
 }
 
-func TestSemVerVersion(t *testing.T) {
+func TestSemanticVersion(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	SetVersion("1.2.3")
 	version := &versionCmd{
 		out: b,
 	}
 	err := version.run()
+
 	assert.Nil(t, err)
 	assert.Equal(t, "letsgopher 1.2.3\n", b.String())
 }
@@ -35,6 +37,7 @@ func TestVersionForError(t *testing.T) {
 		out: b,
 	}
 	err := version.run()
+
 	assert.NotNil(t, err)
 	assert.Equal(t, "expected", err.Error())
 }
