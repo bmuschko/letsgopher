@@ -92,7 +92,7 @@ func mapUserDefinedParams(params []string) (map[string]string, error) {
 	userDefinedParams := make(map[string]string)
 	for _, p := range params {
 		if !strings.Contains(p, "=") {
-			return nil, fmt.Errorf("user-defined parameter %s does not separate key and value by = character")
+			return nil, fmt.Errorf("user-defined parameter %s does not separate key and value by = character", p)
 		}
 		s := strings.Split(p, "=")
 		fmt.Println(s[0])
