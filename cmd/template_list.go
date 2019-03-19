@@ -32,7 +32,7 @@ func newTemplateListCmd(out io.Writer) *cobra.Command {
 func (a *templateListCmd) run() error {
 	f, err := templ.LoadTemplatesFile(a.home.TemplatesFile())
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to load templates.yaml file")
 	}
 	if len(f.Templates) == 0 {
 		return errors.New("no templates installed")
