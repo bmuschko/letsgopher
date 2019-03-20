@@ -14,6 +14,7 @@ type templateInspectCmd struct {
 	templateVersion string
 	out             io.Writer
 	home            templ.Home
+	archiver        templ.Archiver
 }
 
 func newTemplateInspectCmd(out io.Writer) *cobra.Command {
@@ -30,6 +31,7 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 			inspect.templateName = args[0]
 			inspect.templateVersion = args[1]
 			inspect.home = templ.LetsGopherSettings.Home
+			inspect.archiver = &templ.ZIPArchiver{}
 			return inspect.run()
 		},
 	}
@@ -39,25 +41,24 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 func (a *templateInspectCmd) run() error {
 	f, err := templ.LoadTemplatesFile(a.home.TemplatesFile())
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to load templates.yaml file")
 	}
 	if !f.Has(a.templateName, a.templateVersion) {
-		return fmt.Errorf("template with name %s and version %s hasn't been installed", a.templateName, a.templateVersion)
+		return fmt.Errorf("template with name %q and version %q hasn't been installed", a.templateName, a.templateVersion)
 	}
 
 	templateName := a.templateName + "-" + a.templateVersion
 	templateZIP := path.Join(a.home.ArchiveDir(), templateName+".zip")
-	archiver := &templ.ZIPArchiver{}
 
-	tb, err := archiver.LoadFile(templateZIP)
+	tb, err := a.archiver.LoadFile(templateZIP)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("template:")
-	fmt.Printf("  name: \"%s\"\n", a.templateName)
-	fmt.Printf("  version: \"%s\"\n", a.templateVersion)
-	fmt.Println("manifest:")
-	fmt.Print(text.Indent(string(tb), "  "))
+	fmt.Fprintln(a.out, "template:")
+	fmt.Fprintln(a.out, fmt.Sprintf("  name: %q", a.templateName))
+	fmt.Fprintln(a.out, fmt.Sprintf("  version: %q", a.templateVersion))
+	fmt.Fprintln(a.out, "manifest:")
+	fmt.Fprintln(a.out, text.Indent(string(tb), "  "))
 	return nil
 }

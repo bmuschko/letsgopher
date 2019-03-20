@@ -10,6 +10,7 @@ import (
 
 func TestUndefinedVersion(t *testing.T) {
 	b := bytes.NewBuffer(nil)
+	SetVersion("")
 	version := &versionCmd{
 		out: b,
 	}
@@ -32,12 +33,15 @@ func TestSemanticVersion(t *testing.T) {
 }
 
 func TestVersionForError(t *testing.T) {
-	b := new(WriterMock)
+	writerMock := new(WriterMock)
+	SetVersion("1.2.3")
 	version := &versionCmd{
-		out: b,
+		out: writerMock,
 	}
+	writerMock.On("Write", []byte("letsgopher 1.2.3\n")).Return(0, errors.New("expected"))
 	err := version.run()
 
+	writerMock.AssertExpectations(t)
 	assert.NotNil(t, err)
 	assert.Equal(t, "expected", err.Error())
 }
@@ -47,5 +51,6 @@ type WriterMock struct {
 }
 
 func (w *WriterMock) Write(p []byte) (n int, err error) {
-	return 0, errors.New("expected")
+	args := w.Called(p)
+	return args.Int(0), args.Error(1)
 }
