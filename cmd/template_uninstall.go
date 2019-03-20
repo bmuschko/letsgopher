@@ -16,7 +16,7 @@ type templateUninstallCmd struct {
 }
 
 func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
-	remove := &templateUninstallCmd{out: out}
+	uninstall := &templateUninstallCmd{out: out}
 
 	cmd := &cobra.Command{
 		Use:   "uninstall [name] [version]",
@@ -26,10 +26,10 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 				return err
 			}
 
-			remove.templateName = args[0]
-			remove.templateVersion = args[1]
-			remove.home = templ.LetsGopherSettings.Home
-			return remove.run()
+			uninstall.templateName = args[0]
+			uninstall.templateVersion = args[1]
+			uninstall.home = templ.LetsGopherSettings.Home
+			return uninstall.run()
 		},
 	}
 
@@ -53,7 +53,7 @@ func (r *templateUninstallCmd) run() error {
 func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, templateVersion string) error {
 	template := f.Get(templateName, templateVersion)
 	if template == nil {
-		return fmt.Errorf("template with name %s and version %s hasn't been installed", templateName, templateVersion)
+		return fmt.Errorf("template with name %q and version %q hasn't been installed", templateName, templateVersion)
 	}
 
 	err := os.RemoveAll(template.ArchivePath)
@@ -72,7 +72,7 @@ func removeTemplateLine(f *templ.TemplatesFile, templatesFile string, out io.Wri
 		return err
 	}
 
-	fmt.Fprintf(out, "%q has been removed from your templates\n", templateName)
+	fmt.Fprintf(out, "template %q has been removed\n", templateName)
 
 	return nil
 }

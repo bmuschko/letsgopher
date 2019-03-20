@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -75,7 +74,6 @@ templates:
 	err = templateList.run()
 
 	assert.Nil(t, err)
-	fmt.Print(b.String())
 	assert.Equal(t, `NAME       	VERSION	ARCHIVE PATH                                             
 hello-world	0.2.0  	/Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
 `, b.String())
