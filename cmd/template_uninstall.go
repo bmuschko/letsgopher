@@ -47,7 +47,7 @@ func (r *templateUninstallCmd) run() error {
 	if err != nil {
 		return err
 	}
-	return removeTemplateLine(f, templatesFile, r.out, r.templateName)
+	return removeTemplateLine(f, templatesFile, r.out, r.templateName, r.templateVersion)
 }
 
 func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, templateVersion string) error {
@@ -64,8 +64,8 @@ func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, temp
 	return nil
 }
 
-func removeTemplateLine(f *templ.TemplatesFile, templatesFile string, out io.Writer, templateName string) error {
-	if !f.Remove(templateName) {
+func removeTemplateLine(f *templ.TemplatesFile, templatesFile string, out io.Writer, templateName string, templateVersion string) error {
+	if !f.Remove(templateName, templateVersion) {
 		return fmt.Errorf("no template named %q found", templateName)
 	}
 	if err := f.WriteFile(templatesFile, 0644); err != nil {

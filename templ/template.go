@@ -62,11 +62,11 @@ func (r *TemplatesFile) Add(re ...*Template) {
 	r.Templates = append(r.Templates, re...)
 }
 
-func (r *TemplatesFile) Update(re ...*Template) {
+func (r *TemplatesFile) Update(re ...*Template) bool {
+	found := false
 	for _, target := range re {
-		found := false
 		for j, template := range r.Templates {
-			if template.Name == target.Name {
+			if template.Name == target.Name && template.Version == target.Version {
 				r.Templates[j] = target
 				found = true
 				break
@@ -76,13 +76,14 @@ func (r *TemplatesFile) Update(re ...*Template) {
 			r.Add(target)
 		}
 	}
+	return found
 }
 
-func (r *TemplatesFile) Remove(name string) bool {
+func (r *TemplatesFile) Remove(name string, version string) bool {
 	cp := []*Template{}
 	found := false
 	for _, rf := range r.Templates {
-		if rf.Name == name {
+		if rf.Name == name && rf.Version == version {
 			found = true
 			continue
 		}
