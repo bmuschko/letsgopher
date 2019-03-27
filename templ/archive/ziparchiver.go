@@ -1,4 +1,4 @@
-package templ
+package archive
 
 import (
 	"archive/zip"

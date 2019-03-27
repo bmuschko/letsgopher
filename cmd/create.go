@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/archive"
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/spf13/cobra"
 	"gopkg.in/AlecAivazis/survey.v1"
@@ -61,7 +62,7 @@ func (a *projectCreateCmd) run() error {
 
 	templateName := a.templateName + "-" + a.templateVersion
 	templateZIP := path.Join(a.home.ArchiveDir(), templateName+".zip")
-	archiver := &templ.ZIPArchiver{}
+	archiver := &archive.ZIPArchiver{}
 
 	tb, err := archiver.LoadFile(templateZIP)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"github.com/blang/semver"
 	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/download"
 	"github.com/spf13/cobra"
 	"io"
 	"strings"
@@ -43,7 +44,7 @@ func (a *templateInstallCmd) run() error {
 	if err != nil {
 		return err
 	}
-	downloader := &templ.TemplateDownloader{Home: templ.LetsGopherSettings.Home, Getter: templ.NewHTTPGetter()}
+	downloader := &download.TemplateDownloader{Home: templ.LetsGopherSettings.Home, Getter: download.NewHTTPGetter()}
 	templateZIP, err := downloader.DownloadTo(a.templateURL, a.templateName)
 
 	if err != nil {

@@ -1,13 +1,14 @@
-package templ
+package download
 
 import (
+	"github.com/bmuschko/lets-gopher/templ"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 )
 
 type TemplateDownloader struct {
-	Home   Home
+	Home   templ.Home
 	Getter Getter
 }
 
