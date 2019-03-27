@@ -35,16 +35,10 @@ func LoadManifestData(b []byte) (*ManifestFile, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	err = validateManifest(m)
-	if err != nil {
-		return nil, err
-	}
-
 	return m, nil
 }
 
-func validateManifest(m *ManifestFile) error {
+func ValidateManifest(m *ManifestFile) error {
 	err := validateManifestVersion(m.Version)
 	if err != nil {
 		return err
@@ -80,10 +74,15 @@ func validateManifestVersion(version string) error {
 
 func validateManifestParams(params []*Parameter) error {
 	for _, p := range params {
+		if p.Type == "" {
+			return errors.New("every parameter defined in manifest needs to provide a type")
+		}
 		if p.Type == IntegerType {
-			_, err := strconv.Atoi(p.DefaultValue)
-			if err != nil {
-				return err
+			if p.DefaultValue != "" {
+				_, err := strconv.Atoi(p.DefaultValue)
+				if err != nil {
+					return err
+				}
 			}
 			if p.Enum != nil {
 				for _, e := range p.Enum {
@@ -95,9 +94,11 @@ func validateManifestParams(params []*Parameter) error {
 			}
 		}
 		if p.Type == BooleanType {
-			_, err := strconv.ParseBool(p.DefaultValue)
-			if err != nil {
-				return err
+			if p.DefaultValue != "" {
+				_, err := strconv.ParseBool(p.DefaultValue)
+				if err != nil {
+					return err
+				}
 			}
 			if p.Enum != nil {
 				return errors.New("boolean type does not allow enums")

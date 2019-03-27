@@ -71,6 +71,10 @@ func (a *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
+	err = manifest.ValidateManifest(m)
+	if err != nil {
+		return err
+	}
 	userDefinedParams, err := mapUserDefinedParams(a.params)
 	if err != nil {
 		return err
