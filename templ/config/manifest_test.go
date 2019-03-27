@@ -1,4 +1,4 @@
-package manifest
+package config
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -54,7 +54,7 @@ func TestLoadManifestDataForIncorrectDefinition(t *testing.T) {
 
 	assert.Nil(t, manifestFile)
 	assert.NotNil(t, err)
-	assert.Equal(t, "error unmarshaling JSON: json: cannot unmarshal string into Go value of type manifest.ManifestFile", err.Error())
+	assert.Equal(t, "error unmarshaling JSON: json: cannot unmarshal string into Go value of type config.ManifestFile", err.Error())
 }
 
 func TestValidateManifestWithEmptyVersion(t *testing.T) {

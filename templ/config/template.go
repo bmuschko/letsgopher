@@ -1,4 +1,4 @@
-package templ
+package config
 
 import (
 	"github.com/ghodss/yaml"

@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/spf13/cobra"
 	"io"
 	"os"
@@ -38,7 +39,7 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 
 func (r *templateUninstallCmd) run() error {
 	templatesFile := r.home.TemplatesFile()
-	f, err := templ.LoadTemplatesFile(templatesFile)
+	f, err := config.LoadTemplatesFile(templatesFile)
 	if err != nil {
 		return err
 	}
@@ -50,7 +51,7 @@ func (r *templateUninstallCmd) run() error {
 	return removeTemplateLine(f, templatesFile, r.out, r.templateName, r.templateVersion)
 }
 
-func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, templateVersion string) error {
+func deleteTemplateArchiveFile(f *config.TemplatesFile, templateName string, templateVersion string) error {
 	template := f.Get(templateName, templateVersion)
 	if template == nil {
 		return fmt.Errorf("template with name %q and version %q hasn't been installed", templateName, templateVersion)
@@ -64,7 +65,7 @@ func deleteTemplateArchiveFile(f *templ.TemplatesFile, templateName string, temp
 	return nil
 }
 
-func removeTemplateLine(f *templ.TemplatesFile, templatesFile string, out io.Writer, templateName string, templateVersion string) error {
+func removeTemplateLine(f *config.TemplatesFile, templatesFile string, out io.Writer, templateName string, templateVersion string) error {
 	if !f.Remove(templateName, templateVersion) {
 		return fmt.Errorf("no template named %q found", templateName)
 	}

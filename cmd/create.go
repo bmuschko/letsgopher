@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
-	"github.com/bmuschko/lets-gopher/templ/manifest"
+	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/spf13/cobra"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/AlecAivazis/survey.v1/core"
@@ -51,7 +51,7 @@ func newCreateCmd(out io.Writer) *cobra.Command {
 }
 
 func (a *projectCreateCmd) run() error {
-	f, err := templ.LoadTemplatesFile(a.home.TemplatesFile())
+	f, err := config.LoadTemplatesFile(a.home.TemplatesFile())
 	if err != nil {
 		return err
 	}
@@ -67,11 +67,11 @@ func (a *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
-	m, err := manifest.LoadManifestData(tb)
+	m, err := config.LoadManifestData(tb)
 	if err != nil {
 		return err
 	}
-	err = manifest.ValidateManifest(m)
+	err = config.ValidateManifest(m)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func mapUserDefinedParams(params []string) (map[string]string, error) {
 	return userDefinedParams, nil
 }
 
-func requestParameterValues(userDefinedParams map[string]string, manifestParams []*manifest.Parameter) (map[string]interface{}, error) {
+func requestParameterValues(userDefinedParams map[string]string, manifestParams []*config.Parameter) (map[string]interface{}, error) {
 	replacements := make(map[string]interface{})
 	if len(manifestParams) > 0 {
 		core.SetFancyIcons()
@@ -121,19 +121,19 @@ func requestParameterValues(userDefinedParams map[string]string, manifestParams 
 			continue
 		}
 
-		if p.Type == manifest.StringType {
+		if p.Type == config.StringType {
 			value, err := promptString(p)
 			if err != nil {
 				return nil, err
 			}
 			replacements[p.Name] = value
-		} else if p.Type == manifest.IntegerType {
+		} else if p.Type == config.IntegerType {
 			value, err := promptInteger(p)
 			if err != nil {
 				return nil, err
 			}
 			replacements[p.Name] = value
-		} else if p.Type == manifest.BooleanType {
+		} else if p.Type == config.BooleanType {
 			value, err := promptBoolean(p)
 			if err != nil {
 				return nil, err
@@ -156,7 +156,7 @@ func contains(s []string, e string) bool {
 	return false
 }
 
-func promptString(p *manifest.Parameter) (string, error) {
+func promptString(p *config.Parameter) (string, error) {
 	value := ""
 	var err error
 
@@ -190,7 +190,7 @@ func promptString(p *manifest.Parameter) (string, error) {
 	return value, nil
 }
 
-func promptInteger(p *manifest.Parameter) (int, error) {
+func promptInteger(p *config.Parameter) (int, error) {
 	value := 0
 	var err error
 
@@ -224,7 +224,7 @@ func promptInteger(p *manifest.Parameter) (int, error) {
 	return value, nil
 }
 
-func promptBoolean(p *manifest.Parameter) (bool, error) {
+func promptBoolean(p *config.Parameter) (bool, error) {
 	value := false
 	prompt := &survey.Confirm{
 		Message: p.Prompt,

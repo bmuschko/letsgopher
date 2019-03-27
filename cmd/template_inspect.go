@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/kr/text"
 	"github.com/spf13/cobra"
 	"io"
@@ -39,7 +40,7 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 }
 
 func (a *templateInspectCmd) run() error {
-	f, err := templ.LoadTemplatesFile(a.home.TemplatesFile())
+	f, err := config.LoadTemplatesFile(a.home.TemplatesFile())
 	if err != nil {
 		return fmt.Errorf("failed to load templates.yaml file")
 	}

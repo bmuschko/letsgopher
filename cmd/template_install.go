@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/blang/semver"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/spf13/cobra"
 	"io"
 	"strings"
@@ -77,7 +78,7 @@ func extractTemplateVersion(url string) (string, error) {
 }
 
 func addTemplate(name string, version string, templateZIP string, home templ.Home) error {
-	f, err := templ.LoadTemplatesFile(home.TemplatesFile())
+	f, err := config.LoadTemplatesFile(home.TemplatesFile())
 	if err != nil {
 		return err
 	}
@@ -86,7 +87,7 @@ func addTemplate(name string, version string, templateZIP string, home templ.Hom
 		return fmt.Errorf("template with name (%s) already exists, please specify a different name", name)
 	}
 
-	c := templ.Template{
+	c := config.Template{
 		Name:        name,
 		Version:     version,
 		ArchivePath: templateZIP,

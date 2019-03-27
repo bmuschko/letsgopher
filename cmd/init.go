@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/spf13/cobra"
 	"io"
 	"os"
@@ -44,7 +45,7 @@ func (i *initCmd) run() error {
 	templatesFile := i.home.TemplatesFile()
 	if fi, err := os.Stat(templatesFile); err != nil {
 		fmt.Fprintf(i.out, "Creating %s \n", templatesFile)
-		f := templ.NewTemplatesFile()
+		f := config.NewTemplatesFile()
 		if err := f.WriteFile(templatesFile, 0644); err != nil {
 			return err
 		}
