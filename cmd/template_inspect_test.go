@@ -80,7 +80,7 @@ templates:
   name: hello-world
   version: 1.0.0`, archiveFile))
 	defer f.Close()
-	aM.On("LoadFile", archiveFile).Return([]byte(`version: "1.0.0"
+	aM.On("LoadManifestFile", archiveFile).Return([]byte(`version: "1.0.0"
 parameters:
 	- name: "module"
 prompt: "Please provide a module name"
@@ -122,7 +122,7 @@ func (a *ArchiverMock) Extract(src string, replacements map[string]interface{}) 
 	return args.Error(0)
 }
 
-func (a *ArchiverMock) LoadFile(src string) ([]byte, error) {
+func (a *ArchiverMock) LoadManifestFile(src string) ([]byte, error) {
 	args := a.Called(src)
 	return args.Get(0).([]byte), args.Error(1)
 }

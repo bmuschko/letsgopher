@@ -62,9 +62,9 @@ func (a *projectCreateCmd) run() error {
 
 	templateName := a.templateName + "-" + a.templateVersion
 	templateZIP := path.Join(a.home.ArchiveDir(), templateName+".zip")
-	archiver := &archive.ZIPArchiver{}
+	archiver := &archive.ZIPArchiver{Processor: &archive.TemplateProcessor{}}
 
-	tb, err := archiver.LoadFile(templateZIP)
+	tb, err := archiver.LoadManifestFile(templateZIP)
 	if err != nil {
 		return err
 	}

@@ -52,7 +52,7 @@ func (a *templateInspectCmd) run() error {
 	templateName := a.templateName + "-" + a.templateVersion
 	templateZIP := path.Join(a.home.ArchiveDir(), templateName+".zip")
 
-	tb, err := a.archiver.LoadFile(templateZIP)
+	tb, err := a.archiver.LoadManifestFile(templateZIP)
 	if err != nil {
 		return err
 	}

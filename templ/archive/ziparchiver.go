@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"text/template"
 )
 
 const (
@@ -16,6 +15,7 @@ const (
 )
 
 type ZIPArchiver struct {
+	Processor Processor
 }
 
 func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) error {
@@ -67,7 +67,7 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) e
 			if err != nil {
 				return nil
 			}
-			err = processAsTemplate(b, f, replacements)
+			err = a.Processor.Process(b, f, replacements)
 			if err != nil {
 				return nil
 			}
@@ -85,19 +85,7 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) e
 	return nil
 }
 
-func processAsTemplate(b []byte, f *os.File, replacements map[string]interface{}) error {
-	tmpl, err := template.New(f.Name()).Parse(string(b))
-	if err != nil {
-		return nil
-	}
-	err = tmpl.ExecuteTemplate(f, f.Name(), replacements)
-	if err != nil {
-		return nil
-	}
-	return nil
-}
-
-func (a *ZIPArchiver) LoadFile(src string) ([]byte, error) {
+func (a *ZIPArchiver) LoadManifestFile(src string) ([]byte, error) {
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		return nil, err

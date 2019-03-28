@@ -2,5 +2,5 @@ package archive
 
 type Archiver interface {
 	Extract(src string, replacements map[string]interface{}) error
-	LoadFile(src string) ([]byte, error)
+	LoadManifestFile(src string) ([]byte, error)
 }
