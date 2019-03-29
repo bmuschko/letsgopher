@@ -117,8 +117,8 @@ type ArchiverMock struct {
 	mock.Mock
 }
 
-func (a *ArchiverMock) Extract(src string, replacements map[string]interface{}) error {
-	args := a.Called(src, replacements)
+func (a *ArchiverMock) Extract(archiveFile string, targetDir string, replacements map[string]interface{}) error {
+	args := a.Called(archiveFile, targetDir, replacements)
 	return args.Error(0)
 }
 

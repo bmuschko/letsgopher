@@ -9,7 +9,6 @@ import (
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/AlecAivazis/survey.v1/core"
 	"io"
-	"os"
 	"path"
 	"strconv"
 	"strings"
@@ -85,11 +84,10 @@ func (a *projectCreateCmd) run() error {
 		return err
 	}
 
-	err = archiver.Extract(templateZIP, r)
+	err = archiver.Extract(templateZIP, a.targetDir, r)
 	if err != nil {
 		return nil
 	}
-	err = os.Rename(templateName, a.targetDir)
 	return err
 }
 

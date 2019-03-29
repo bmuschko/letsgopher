@@ -18,8 +18,8 @@ type ZIPArchiver struct {
 	Processor Processor
 }
 
-func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) error {
-	r, err := zip.OpenReader(src)
+func (a *ZIPArchiver) Extract(archiveFile string, targetDir string, replacements map[string]interface{}) error {
+	r, err := zip.OpenReader(archiveFile)
 	if err != nil {
 		return err
 	}
@@ -28,6 +28,11 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) e
 			panic(err)
 		}
 	}()
+
+	err = os.MkdirAll(targetDir, 0755)
+	if err != nil {
+		return err
+	}
 
 	extractAndWriteFile := func(f *zip.File) error {
 		rc, err := f.Open()
@@ -40,20 +45,23 @@ func (a *ZIPArchiver) Extract(src string, replacements map[string]interface{}) e
 			}
 		}()
 
+		path := filepath.Join(targetDir, f.Name)
+
 		if f.FileInfo().IsDir() {
-			err := os.MkdirAll(f.Name, f.Mode())
+			err := os.MkdirAll(path, f.Mode())
 			if err != nil {
 				return err
 			}
 		} else {
-			if filepath.Base(f.Name) == manifestFile {
+			// ignore manifest file
+			if filepath.Base(path) == manifestFile {
 				return nil
 			}
-			err := os.MkdirAll(filepath.Dir(f.Name), f.Mode())
+			err := os.MkdirAll(filepath.Dir(path), f.Mode())
 			if err != nil {
 				return err
 			}
-			f, err := os.OpenFile(f.Name, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
 				return err
 			}
