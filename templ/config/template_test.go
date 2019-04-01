@@ -1,9 +1,9 @@
 package config
 
 import (
+	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"testing"
 )
@@ -128,11 +128,8 @@ func TestInsertsUnknownTemplateOnUpdate(t *testing.T) {
 }
 
 func TestWriteTemplateFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	templatesFile := NewTemplatesFile()
 	helloWorldTemplate := &Template{Name: "hello-world", Version: "1.0.0", ArchivePath: "/my/path/archive/hello-world-1.0.0.zip"}
@@ -140,7 +137,7 @@ func TestWriteTemplateFile(t *testing.T) {
 	templatesFile.Add(helloWorldTemplate)
 	templatesFile.Add(webProject)
 	f := filepath.Join(tmpHome, "template.yaml")
-	err = templatesFile.WriteFile(f, 0644)
+	err := templatesFile.WriteFile(f, 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -163,14 +160,11 @@ templates:
 }
 
 func TestReadTemplateFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	f := filepath.Join(tmpHome, "template.yaml")
-	err = ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
+	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
 templates:
   - archivePath: /my/path/archive/hello-world-1.0.0.zip
     name: hello-world

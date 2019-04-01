@@ -2,18 +2,10 @@ package config
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"os"
 	"testing"
 )
 
 func TestLoadManifestDataForCorrectDefinition(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
-
 	content := []byte(`version: "0.1.0"
 parameters:
   - name: "module"

@@ -3,18 +3,13 @@ package archive
 import (
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestExtractWithoutTemplateReplacement(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -28,7 +23,7 @@ func TestExtractWithoutTemplateReplacement(t *testing.T) {
 	manifestFile := filepath.Join(extractedDir, manifestFile)
 	extractedFile1 := filepath.Join(extractedDir, "file1.txt")
 	extractedFile2 := filepath.Join(extractedDir, "file2.txt")
-	err = archiver.Extract(archive, extractedDir, make(map[string]interface{}))
+	err := archiver.Extract(archive, extractedDir, make(map[string]interface{}))
 
 	assert.Nil(t, err)
 	assert.DirExists(t, extractedDir)
@@ -51,11 +46,8 @@ func TestExtractWithoutTemplateReplacement(t *testing.T) {
 func TestExtractWithTemplateReplacement(t *testing.T) {
 	t.Skip("template replacements are currently not working")
 
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -72,7 +64,7 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 	replacements := make(map[string]interface{})
 	replacements["a"] = "file1"
 	replacements["b"] = "file2"
-	err = archiver.Extract(archive, extractedDir, replacements)
+	err := archiver.Extract(archive, extractedDir, replacements)
 
 	assert.Nil(t, err)
 	assert.DirExists(t, extractedDir)
@@ -93,11 +85,8 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 }
 
 func TestLoadExistingManifestFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -112,11 +101,8 @@ func TestLoadExistingManifestFile(t *testing.T) {
 }
 
 func TestLoadNonExistentManifestFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}

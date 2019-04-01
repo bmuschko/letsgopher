@@ -8,14 +8,26 @@ import (
 	"testing"
 )
 
+var tmpDirs []string
+
 func TmpDir(t *testing.T, dir string, prefix string) string {
 	t.Helper()
 	tmpDir, err := ioutil.TempDir(dir, prefix)
 	if err != nil {
 		t.Fatalf("failed to create temporary directory %s", tmpDir)
 	}
-	defer os.RemoveAll(tmpDir)
+	tmpDirs = append(tmpDirs, tmpDir)
 	return tmpDir
+}
+
+func CleanTmpDirs(t *testing.T) {
+	for _, path := range tmpDirs {
+		if err := os.RemoveAll(path); err != nil {
+			t.Errorf("failed to remove temporary directory %s", path)
+		}
+	}
+
+	tmpDirs = make([]string, 0)
 }
 
 func CreateZip(filename string, files []TestFile) error {

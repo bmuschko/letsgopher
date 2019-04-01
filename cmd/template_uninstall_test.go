@@ -13,11 +13,8 @@ import (
 )
 
 func TestUninstallExistentTemplate(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{
@@ -27,7 +24,7 @@ func TestUninstallExistentTemplate(t *testing.T) {
 		home:            templ.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
-	err = os.MkdirAll(archiveDir, 0755)
+	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
 	}
@@ -58,11 +55,8 @@ templates: []
 }
 
 func TestUninstallNonExistentTemplate(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{
@@ -72,7 +66,7 @@ func TestUninstallNonExistentTemplate(t *testing.T) {
 		home:            templ.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
-	err = os.MkdirAll(archiveDir, 0755)
+	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
 	}
@@ -98,11 +92,8 @@ templates: []`, string(result))
 }
 
 func TestUninstallExistentArchiveFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{
@@ -112,7 +103,7 @@ func TestUninstallExistentArchiveFile(t *testing.T) {
 		home:            templ.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
-	err = os.MkdirAll(archiveDir, 0755)
+	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
 	}

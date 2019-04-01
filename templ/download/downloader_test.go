@@ -8,18 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestDownloadSuccessfully(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	zipFile := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	files := []testhelper.TestFile{
@@ -32,7 +28,7 @@ func TestDownloadSuccessfully(t *testing.T) {
 	downloader := &TemplateDownloader{Getter: gM, Home: templ.Home(tmpHome)}
 	url := "https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-1.0.0.zip"
 	targetDir := filepath.Join(tmpHome, "archive")
-	err = os.MkdirAll(targetDir, os.ModePerm)
+	err := os.MkdirAll(targetDir, os.ModePerm)
 	buf := bytes.NewBuffer(nil)
 	source, err := os.Open(zipFile)
 	_, err = io.Copy(buf, source)
@@ -45,11 +41,8 @@ func TestDownloadSuccessfully(t *testing.T) {
 }
 
 func TestDownloadFailed(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	gM := new(GetterMock)
 	downloader := &TemplateDownloader{Getter: gM, Home: templ.Home(tmpHome)}

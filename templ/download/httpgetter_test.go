@@ -4,7 +4,6 @@ import (
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -13,11 +12,8 @@ import (
 )
 
 func TestGetForZipFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	zipFile := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	files := []testhelper.TestFile{

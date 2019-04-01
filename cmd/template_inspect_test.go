@@ -4,38 +4,32 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestInspectNonExistentTemplateFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	templateInspect := &templateInspectCmd{
 		out:  b,
 		home: templ.Home(tmpHome),
 	}
-	err = templateInspect.run()
+	err := templateInspect.run()
 
 	assert.NotNil(t, err)
 	assert.Equal(t, "failed to load templates.yaml file", err.Error())
 }
 
 func TestInspectNonExistentTemplateName(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	templateInspect := &templateInspectCmd{
@@ -56,11 +50,8 @@ templates: []`)
 }
 
 func TestInspectValidTemplate(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	aM := new(ArchiverMock)

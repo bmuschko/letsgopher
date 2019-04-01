@@ -3,37 +3,31 @@ package cmd
 import (
 	"bytes"
 	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestNonExistentTemplateFile(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
 		out:  b,
 		home: templ.Home(tmpHome),
 	}
-	err = templateList.run()
+	err := templateList.run()
 
 	assert.NotNil(t, err)
 	assert.Equal(t, "failed to load templates.yaml file", err.Error())
 }
 
 func TestEmptyTemplateList(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
@@ -52,11 +46,8 @@ templates: []`)
 }
 
 func TestPopulatedTemplateList(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
