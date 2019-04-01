@@ -15,10 +15,6 @@ type initCmd struct {
 	home templ.Home
 }
 
-func init() {
-	rootCmd.AddCommand(newInitCmd(rootCmd.OutOrStderr()))
-}
-
 func newInitCmd(out io.Writer) *cobra.Command {
 	i := &initCmd{out: out}
 

@@ -14,10 +14,6 @@ import (
 	"strings"
 )
 
-func init() {
-	rootCmd.AddCommand(newCreateCmd(rootCmd.OutOrStderr()))
-}
-
 type projectCreateCmd struct {
 	templateName    string
 	templateVersion string

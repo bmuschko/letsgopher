@@ -5,10 +5,6 @@ import (
 	"io"
 )
 
-func init() {
-	rootCmd.AddCommand(newTemplateCmd(rootCmd.OutOrStderr()))
-}
-
 func newTemplateCmd(out io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "template install|uninstall|list|inspect [args]",

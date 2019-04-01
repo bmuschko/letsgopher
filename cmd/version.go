@@ -15,10 +15,6 @@ func SetVersion(v string) {
 	version = v
 }
 
-func init() {
-	rootCmd.AddCommand(newVersionCmd(rootCmd.OutOrStderr()))
-}
-
 type versionCmd struct {
 	out io.Writer
 }
@@ -28,7 +24,7 @@ func newVersionCmd(out io.Writer) *cobra.Command {
 		out: out,
 	}
 
-	versionCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "print the version number and exit",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -38,7 +34,7 @@ func newVersionCmd(out io.Writer) *cobra.Command {
 			return version.run()
 		},
 	}
-	return versionCmd
+	return cmd
 }
 
 func (v *versionCmd) run() error {
