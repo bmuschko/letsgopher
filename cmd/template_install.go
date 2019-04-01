@@ -45,7 +45,7 @@ func (a *templateInstallCmd) run() error {
 		return err
 	}
 	downloader := &download.TemplateDownloader{Home: templ.LetsGopherSettings.Home, Getter: download.NewHTTPGetter()}
-	templateZIP, err := downloader.DownloadTo(a.templateURL, a.templateName)
+	templateZIP, err := downloader.Download(a.templateURL)
 
 	if err != nil {
 		return nil

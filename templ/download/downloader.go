@@ -12,7 +12,7 @@ type TemplateDownloader struct {
 	Getter Getter
 }
 
-func (c *TemplateDownloader) DownloadTo(url, dest string) (string, error) {
+func (c *TemplateDownloader) Download(url string) (string, error) {
 	data, err := c.Getter.Get(url)
 	if err != nil {
 		return "", err
