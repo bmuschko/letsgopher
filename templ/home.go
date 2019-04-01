@@ -21,14 +21,14 @@ func (h Home) String() string {
 }
 
 func (h Home) ArchiveDir() string {
-	return h.Path("archive")
+	return h.path("archive")
 }
 
 func (h Home) TemplatesFile() string {
-	return h.Path("templates.yaml")
+	return h.path("templates.yaml")
 }
 
-func (h Home) Path(elem ...string) string {
+func (h Home) path(elem ...string) string {
 	p := []string{h.String()}
 	p = append(p, elem...)
 	return filepath.Join(p...)
