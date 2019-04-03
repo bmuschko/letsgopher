@@ -3,7 +3,7 @@ package download
 import (
 	"bytes"
 	"errors"
-	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -25,7 +25,7 @@ func TestDownloadSuccessfully(t *testing.T) {
 	testhelper.CreateZip(zipFile, files)
 
 	gM := new(GetterMock)
-	downloader := &TemplateDownloader{Getter: gM, Home: templ.Home(tmpHome)}
+	downloader := &TemplateDownloader{Getter: gM, Home: path.Home(tmpHome)}
 	url := "https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-1.0.0.zip"
 	targetDir := filepath.Join(tmpHome, "archive")
 	err := os.MkdirAll(targetDir, os.ModePerm)
@@ -45,7 +45,7 @@ func TestDownloadFailed(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	gM := new(GetterMock)
-	downloader := &TemplateDownloader{Getter: gM, Home: templ.Home(tmpHome)}
+	downloader := &TemplateDownloader{Getter: gM, Home: path.Home(tmpHome)}
 	url := "https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-1.0.0.zip"
 	downloadError := errors.New("expected")
 	gM.On("Get", url).Return(bytes.NewBuffer(nil), downloadError)

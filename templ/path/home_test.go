@@ -1,4 +1,4 @@
-package templ
+package path
 
 import (
 	"github.com/bmuschko/lets-gopher/testhelper"

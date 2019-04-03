@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/archive"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	path2 "github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/kr/text"
 	"github.com/spf13/cobra"
 	"io"
@@ -15,7 +16,7 @@ type templateInspectCmd struct {
 	templateName    string
 	templateVersion string
 	out             io.Writer
-	home            templ.Home
+	home            path2.Home
 	archiver        archive.Archiver
 }
 
@@ -32,7 +33,7 @@ func newTemplateInspectCmd(out io.Writer) *cobra.Command {
 
 			inspect.templateName = args[0]
 			inspect.templateVersion = args[1]
-			inspect.home = templ.LetsGopherSettings.Home
+			inspect.home = environment.Settings.Home
 			inspect.archiver = &archive.ZIPArchiver{}
 			return inspect.run()
 		},

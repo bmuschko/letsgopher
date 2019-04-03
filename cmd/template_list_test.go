@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bytes"
-	"github.com/bmuschko/lets-gopher/templ"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"os"
@@ -17,7 +17,7 @@ func TestNonExistentTemplateFile(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
 		out:  b,
-		home: templ.Home(tmpHome),
+		home: path.Home(tmpHome),
 	}
 	err := templateList.run()
 
@@ -32,7 +32,7 @@ func TestEmptyTemplateList(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
 		out:  b,
-		home: templ.Home(tmpHome),
+		home: path.Home(tmpHome),
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
@@ -52,7 +52,7 @@ func TestPopulatedTemplateList(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
 		out:  b,
-		home: templ.Home(tmpHome),
+		home: path.Home(tmpHome),
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)

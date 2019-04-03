@@ -3,8 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 	"io"
@@ -12,7 +13,7 @@ import (
 
 type templateListCmd struct {
 	out  io.Writer
-	home templ.Home
+	home path.Home
 }
 
 func newTemplateListCmd(out io.Writer) *cobra.Command {
@@ -22,7 +23,7 @@ func newTemplateListCmd(out io.Writer) *cobra.Command {
 		Use:   "list [flags]",
 		Short: "list templates",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			list.home = templ.LetsGopherSettings.Home
+			list.home = environment.Settings.Home
 			return list.run()
 		},
 	}

@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/spf13/cobra"
 	"io"
 	"os"
@@ -13,7 +14,7 @@ type templateUninstallCmd struct {
 	templateName    string
 	templateVersion string
 	out             io.Writer
-	home            templ.Home
+	home            path.Home
 }
 
 func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
@@ -29,7 +30,7 @@ func newTemplateUninstallCmd(out io.Writer) *cobra.Command {
 
 			uninstall.templateName = args[0]
 			uninstall.templateVersion = args[1]
-			uninstall.home = templ.LetsGopherSettings.Home
+			uninstall.home = environment.Settings.Home
 			return uninstall.run()
 		},
 	}

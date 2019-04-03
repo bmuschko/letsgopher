@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/blang/semver"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/bmuschko/lets-gopher/templ/download"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/spf13/cobra"
 	"io"
 	"strings"
@@ -16,7 +17,7 @@ type templateInstallCmd struct {
 	templateURL  string
 	templateName string
 	out          io.Writer
-	home         templ.Home
+	home         path.Home
 }
 
 func newTemplateInstallCmd(out io.Writer) *cobra.Command {
@@ -32,7 +33,7 @@ func newTemplateInstallCmd(out io.Writer) *cobra.Command {
 
 			add.templateURL = args[0]
 			add.templateName = args[1]
-			add.home = templ.LetsGopherSettings.Home
+			add.home = environment.Settings.Home
 			return add.run()
 		},
 	}
@@ -44,7 +45,7 @@ func (a *templateInstallCmd) run() error {
 	if err != nil {
 		return err
 	}
-	downloader := &download.TemplateDownloader{Home: templ.LetsGopherSettings.Home, Getter: download.NewHTTPGetter()}
+	downloader := &download.TemplateDownloader{Home: environment.Settings.Home, Getter: download.NewHTTPGetter()}
 	templateZIP, err := downloader.Download(a.templateURL)
 
 	if err != nil {
@@ -78,7 +79,7 @@ func extractTemplateVersion(url string) (string, error) {
 	return parsedVersion.String(), nil
 }
 
-func addTemplate(name string, version string, templateZIP string, home templ.Home) error {
+func addTemplate(name string, version string, templateZIP string, home path.Home) error {
 	f, err := config.LoadTemplatesFile(home.TemplatesFile())
 	if err != nil {
 		return err

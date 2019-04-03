@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/archive"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	path2 "github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/spf13/cobra"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/AlecAivazis/survey.v1/core"
@@ -20,7 +21,7 @@ type projectCreateCmd struct {
 	targetDir       string
 	params          []string
 	out             io.Writer
-	home            templ.Home
+	home            path2.Home
 }
 
 func newCreateCmd(out io.Writer) *cobra.Command {
@@ -37,7 +38,7 @@ func newCreateCmd(out io.Writer) *cobra.Command {
 			create.templateName = args[0]
 			create.templateVersion = args[1]
 			create.targetDir = args[2]
-			create.home = templ.LetsGopherSettings.Home
+			create.home = environment.Settings.Home
 			return create.run()
 		},
 	}

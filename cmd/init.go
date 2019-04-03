@@ -3,8 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ"
 	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/templ/environment"
+	"github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/spf13/cobra"
 	"io"
 	"os"
@@ -12,7 +13,7 @@ import (
 
 type initCmd struct {
 	out  io.Writer
-	home templ.Home
+	home path.Home
 }
 
 func newInitCmd(out io.Writer) *cobra.Command {
@@ -25,7 +26,7 @@ func newInitCmd(out io.Writer) *cobra.Command {
 			if len(args) != 0 {
 				return errors.New("this command does not accept arguments")
 			}
-			i.home = templ.LetsGopherSettings.Home
+			i.home = environment.Settings.Home
 			return i.run()
 		},
 	}
