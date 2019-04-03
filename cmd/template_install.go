@@ -18,10 +18,11 @@ type templateInstallCmd struct {
 	templateName string
 	out          io.Writer
 	home         path.Home
+	downloader   download.Downloader
 }
 
 func newTemplateInstallCmd(out io.Writer) *cobra.Command {
-	add := &templateInstallCmd{out: out}
+	install := &templateInstallCmd{out: out}
 
 	cmd := &cobra.Command{
 		Use:   "install [url] [name]",
@@ -31,31 +32,31 @@ func newTemplateInstallCmd(out io.Writer) *cobra.Command {
 				return err
 			}
 
-			add.templateURL = args[0]
-			add.templateName = args[1]
-			add.home = environment.Settings.Home
-			return add.run()
+			install.templateURL = args[0]
+			install.templateName = args[1]
+			install.home = environment.Settings.Home
+			install.downloader = &download.TemplateDownloader{Home: environment.Settings.Home, Getter: download.NewHTTPGetter()}
+			return install.run()
 		},
 	}
 	return cmd
 }
 
-func (a *templateInstallCmd) run() error {
-	templateVersion, err := extractTemplateVersion(a.templateURL)
+func (c *templateInstallCmd) run() error {
+	templateVersion, err := extractTemplateVersion(c.templateURL)
 	if err != nil {
 		return err
 	}
-	downloader := &download.TemplateDownloader{Home: environment.Settings.Home, Getter: download.NewHTTPGetter()}
-	templateZIP, err := downloader.Download(a.templateURL)
+	templateZIP, err := c.downloader.Download(c.templateURL)
 
 	if err != nil {
-		return nil
-	}
-
-	if err := addTemplate(a.templateName, templateVersion, templateZIP, a.home); err != nil {
 		return err
 	}
-	fmt.Fprintf(a.out, "%q has been added to your templates\n", a.templateName)
+
+	if err := addTemplate(c.templateName, templateVersion, templateZIP, c.home); err != nil {
+		return err
+	}
+	fmt.Fprintf(c.out, "%q has been added to your templates\n", c.templateName)
 	return nil
 }
 
@@ -86,7 +87,7 @@ func addTemplate(name string, version string, templateZIP string, home path.Home
 	}
 
 	if f.Has(name, version) {
-		return fmt.Errorf("template with name (%s) already exists, please specify a different name", name)
+		return fmt.Errorf("template with name %q already exists, please specify a different name", name)
 	}
 
 	c := config.Template{
