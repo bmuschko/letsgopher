@@ -10,9 +10,7 @@ import (
 	"path/filepath"
 )
 
-const (
-	manifestFile = "manifest.yaml"
-)
+const manifestFile = "manifest.yaml"
 
 type ZIPArchiver struct {
 	Processor Processor

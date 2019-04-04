@@ -13,9 +13,7 @@ import (
 	"strings"
 )
 
-const (
-	keyValueSeparator = "="
-)
+const keyValueSeparator = "="
 
 type projectCreateCmd struct {
 	templateName    string
