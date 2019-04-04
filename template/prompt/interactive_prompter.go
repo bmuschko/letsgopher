@@ -2,7 +2,7 @@ package prompt
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/config"
+	"github.com/bmuschko/lets-gopher/template/config"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"gopkg.in/AlecAivazis/survey.v1/core"
 	"strconv"

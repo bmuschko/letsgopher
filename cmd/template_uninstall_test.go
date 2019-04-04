@@ -3,7 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/storage"
+	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/cmd"
-	"github.com/bmuschko/lets-gopher/templ/download"
+	"github.com/bmuschko/lets-gopher/template/download"
 	"os"
 )
 

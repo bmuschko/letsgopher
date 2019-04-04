@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/archive"
-	"github.com/bmuschko/lets-gopher/templ/config"
-	"github.com/bmuschko/lets-gopher/templ/environment"
-	"github.com/bmuschko/lets-gopher/templ/storage"
+	"github.com/bmuschko/lets-gopher/template/archive"
+	"github.com/bmuschko/lets-gopher/template/config"
+	"github.com/bmuschko/lets-gopher/template/environment"
+	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/kr/text"
 	"github.com/spf13/cobra"
 	"io"

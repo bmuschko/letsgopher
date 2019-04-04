@@ -1,7 +1,7 @@
 package environment
 
 import (
-	"github.com/bmuschko/lets-gopher/templ/storage"
+	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/mitchellh/go-homedir"
 	"path/filepath"
 )
