@@ -46,5 +46,4 @@ func (h *TestFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	f.Read(b)
 	f.Seek(0, 0)
 	io.Copy(w, f)
-	return
 }

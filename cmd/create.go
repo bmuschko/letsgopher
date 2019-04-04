@@ -117,7 +117,10 @@ func requestParameterValues(userDefinedParams map[string]string, manifestParams 
 			continue
 		}
 
-		prompter.Prompt(p, replacements)
+		err := prompter.Prompt(p, replacements)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return replacements, nil
