@@ -4,19 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/bmuschko/lets-gopher/template/storage"
+	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestInitNonExistentHome(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
@@ -25,7 +22,7 @@ func TestInitNonExistentHome(t *testing.T) {
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
-	err = init.run()
+	err := init.run()
 
 	assert.Nil(t, err)
 	assert.DirExists(t, archiveDir)
@@ -34,11 +31,8 @@ func TestInitNonExistentHome(t *testing.T) {
 }
 
 func TestInitExistentHome(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
@@ -49,7 +43,7 @@ func TestInitExistentHome(t *testing.T) {
 	os.MkdirAll(archiveDir, 0755)
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	os.Create(templatesFile)
-	err = init.run()
+	err := init.run()
 
 	assert.Nil(t, err)
 	assert.DirExists(t, archiveDir)
@@ -58,11 +52,8 @@ func TestInitExistentHome(t *testing.T) {
 }
 
 func TestInitTemplateFileIsDirectory(t *testing.T) {
-	tmpHome, err := ioutil.TempDir("", "test")
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpHome)
-	}
-	defer os.RemoveAll(tmpHome)
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
@@ -73,7 +64,7 @@ func TestInitTemplateFileIsDirectory(t *testing.T) {
 	os.MkdirAll(archiveDir, 0755)
 	templatesDir := filepath.Join(tmpHome, "templates.yaml")
 	os.MkdirAll(templatesDir, 0755)
-	err = init.run()
+	err := init.run()
 
 	assert.NotNil(t, err)
 	assert.Equal(t, fmt.Sprintf("%s must be a file, not a directory", templatesDir), err.Error())
