@@ -109,3 +109,125 @@ parameters:
 	assert.Nil(t, err)
 	assert.Equal(t, "created project at \"/target\"\n", b.String())
 }
+
+func TestCreateProjectWithRegisteredTemplateAndNonMatchingEnumParams(t *testing.T) {
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
+
+	f := path.Home(tmpHome).TemplatesFile()
+	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+templates:
+- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+  name: hello-world
+  version: 1.0.0`), 0644)
+	if err != nil {
+		t.Error("could not write template file")
+	}
+
+	b := bytes.NewBuffer(nil)
+	params := make([]string, 2)
+	params[0] = "param1=hello"
+	params[1] = "param2=world"
+	aM := new(ArchiverMock)
+	projectCreate := &projectCreateCmd{
+		templateName:    "hello-world",
+		templateVersion: "1.0.0",
+		targetDir:       "/target",
+		params:          params,
+		out:             b,
+		home:            path.Home(tmpHome),
+		archiver:        aM,
+	}
+	aM.On("LoadManifestFile", path.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+parameters:
+  - name: "param1"
+    prompt: "Please provide a value for parameter 1"
+    type: "string"
+    enum: ["a", "b", "c"]`), nil)
+	err = projectCreate.run()
+
+	aM.AssertExpectations(t)
+	assert.NotNil(t, err)
+	assert.Equal(t, "provided value 'hello' is not defined in enum [a, b, c]", err.Error())
+}
+
+func TestCreateProjectWithRegisteredTemplateAndMatchingEnumParams(t *testing.T) {
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
+
+	f := path.Home(tmpHome).TemplatesFile()
+	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+templates:
+- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+  name: hello-world
+  version: 1.0.0`), 0644)
+	if err != nil {
+		t.Error("could not write template file")
+	}
+
+	b := bytes.NewBuffer(nil)
+	params := make([]string, 1)
+	params[0] = "param1=hello"
+	aM := new(ArchiverMock)
+	projectCreate := &projectCreateCmd{
+		templateName:    "hello-world",
+		templateVersion: "1.0.0",
+		targetDir:       "/target",
+		params:          params,
+		out:             b,
+		home:            path.Home(tmpHome),
+		archiver:        aM,
+	}
+	aM.On("LoadManifestFile", path.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+parameters:
+  - name: "param1"
+    prompt: "Please provide a value for parameter 1"
+    type: "string"
+    enum: ["a", "hello", "c"]`), nil)
+	aM.On("Extract", path.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip", "/target", map[string]interface{}{"param1": "hello"}).Return(nil)
+	err = projectCreate.run()
+
+	aM.AssertExpectations(t)
+	assert.Nil(t, err)
+	assert.Equal(t, "created project at \"/target\"\n", b.String())
+}
+
+func TestCreateProjectWithMisformedUserDefinedParams(t *testing.T) {
+	tmpHome := testhelper.TmpDir(t, "", "test")
+	defer testhelper.CleanTmpDirs(t)
+
+	f := path.Home(tmpHome).TemplatesFile()
+	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+templates:
+- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+  name: hello-world
+  version: 1.0.0`), 0644)
+	if err != nil {
+		t.Error("could not write template file")
+	}
+
+	b := bytes.NewBuffer(nil)
+	params := make([]string, 1)
+	params[0] = "param1_hello"
+	aM := new(ArchiverMock)
+	projectCreate := &projectCreateCmd{
+		templateName:    "hello-world",
+		templateVersion: "1.0.0",
+		targetDir:       "/target",
+		params:          params,
+		out:             b,
+		home:            path.Home(tmpHome),
+		archiver:        aM,
+	}
+	aM.On("LoadManifestFile", path.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+parameters:
+  - name: "param1"
+    prompt: "Please provide a value for parameter 1"
+    type: "string"
+    enum: ["a", "b", "c"]`), nil)
+	err = projectCreate.run()
+
+	aM.AssertExpectations(t)
+	assert.NotNil(t, err)
+	assert.Equal(t, "user-defined parameter \"param1_hello\" does not separate key and value by = character", err.Error())
+}
