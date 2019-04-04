@@ -5,7 +5,7 @@ import (
 	"github.com/bmuschko/lets-gopher/templ/archive"
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/bmuschko/lets-gopher/templ/environment"
-	path2 "github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/kr/text"
 	"github.com/spf13/cobra"
 	"io"
@@ -16,7 +16,7 @@ type templateInspectCmd struct {
 	templateName    string
 	templateVersion string
 	out             io.Writer
-	home            path2.Home
+	home            storage.Home
 	archiver        archive.Archiver
 }
 

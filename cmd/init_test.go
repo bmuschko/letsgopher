@@ -3,7 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
@@ -21,7 +21,7 @@ func TestInitNonExistentHome(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
 		out:  b,
-		home: path.Home(tmpHome),
+		home: storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
@@ -43,7 +43,7 @@ func TestInitExistentHome(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
 		out:  b,
-		home: path.Home(tmpHome),
+		home: storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	os.MkdirAll(archiveDir, 0755)
@@ -67,7 +67,7 @@ func TestInitTemplateFileIsDirectory(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
 		out:  b,
-		home: path.Home(tmpHome),
+		home: storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	os.MkdirAll(archiveDir, 0755)

@@ -1,14 +1,14 @@
 package download
 
 import (
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
 )
 
 type TemplateDownloader struct {
-	Home   path.Home
+	Home   storage.Home
 	Getter Getter
 }
 

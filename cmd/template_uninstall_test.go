@@ -3,7 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -21,7 +21,7 @@ func TestUninstallExistentTemplate(t *testing.T) {
 		templateName:    "hello-world",
 		templateVersion: "1.0.0",
 		out:             b,
-		home:            path.Home(tmpHome),
+		home:            storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	err := os.MkdirAll(archiveDir, 0755)
@@ -63,7 +63,7 @@ func TestUninstallNonExistentTemplate(t *testing.T) {
 		templateName:    "hello-world",
 		templateVersion: "1.0.0",
 		out:             b,
-		home:            path.Home(tmpHome),
+		home:            storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	err := os.MkdirAll(archiveDir, 0755)
@@ -100,7 +100,7 @@ func TestUninstallExistentArchiveFile(t *testing.T) {
 		templateName:    "hello-world",
 		templateVersion: "1.0.0",
 		out:             b,
-		home:            path.Home(tmpHome),
+		home:            storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
 	err := os.MkdirAll(archiveDir, 0755)

@@ -1,16 +1,16 @@
 package environment
 
 import (
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/mitchellh/go-homedir"
 	"path/filepath"
 )
 
 var defaultHome = filepath.Join(homeDir(), ".letsgopher")
-var Settings = EnvSettings{Home: path.Home(defaultHome)}
+var Settings = EnvSettings{Home: storage.Home(defaultHome)}
 
 type EnvSettings struct {
-	Home path.Home
+	Home storage.Home
 }
 
 func homeDir() string {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/bmuschko/lets-gopher/templ/environment"
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 	"io"
@@ -13,7 +13,7 @@ import (
 
 type templateListCmd struct {
 	out  io.Writer
-	home path.Home
+	home storage.Home
 }
 
 func newTemplateListCmd(out io.Writer) *cobra.Command {

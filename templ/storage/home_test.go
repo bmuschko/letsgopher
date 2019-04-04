@@ -1,4 +1,4 @@
-package path
+package storage
 
 import (
 	"github.com/bmuschko/lets-gopher/testhelper"

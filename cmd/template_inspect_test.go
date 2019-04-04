@@ -3,7 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -19,7 +19,7 @@ func TestInspectNonExistentTemplateFile(t *testing.T) {
 	b := bytes.NewBuffer(nil)
 	templateInspect := &templateInspectCmd{
 		out:  b,
-		home: path.Home(tmpHome),
+		home: storage.Home(tmpHome),
 	}
 	err := templateInspect.run()
 
@@ -36,7 +36,7 @@ func TestInspectNonExistentTemplateName(t *testing.T) {
 		templateName:    "hello-world",
 		templateVersion: "1.0.0",
 		out:             b,
-		home:            path.Home(tmpHome),
+		home:            storage.Home(tmpHome),
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
@@ -59,7 +59,7 @@ func TestInspectValidTemplate(t *testing.T) {
 		templateName:    "hello-world",
 		templateVersion: "1.0.0",
 		out:             b,
-		home:            path.Home(tmpHome),
+		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")

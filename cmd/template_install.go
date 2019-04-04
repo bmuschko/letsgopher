@@ -7,7 +7,7 @@ import (
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/bmuschko/lets-gopher/templ/download"
 	"github.com/bmuschko/lets-gopher/templ/environment"
-	"github.com/bmuschko/lets-gopher/templ/path"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/spf13/cobra"
 	"io"
 	"strings"
@@ -17,7 +17,7 @@ type templateInstallCmd struct {
 	templateURL  string
 	templateName string
 	out          io.Writer
-	home         path.Home
+	home         storage.Home
 	downloader   download.Downloader
 }
 
@@ -80,7 +80,7 @@ func extractTemplateVersion(url string) (string, error) {
 	return parsedVersion.String(), nil
 }
 
-func addTemplate(name string, version string, templateZIP string, home path.Home) error {
+func addTemplate(name string, version string, templateZIP string, home storage.Home) error {
 	f, err := config.LoadTemplatesFile(home.TemplatesFile())
 	if err != nil {
 		return err

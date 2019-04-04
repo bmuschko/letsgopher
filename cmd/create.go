@@ -5,8 +5,8 @@ import (
 	"github.com/bmuschko/lets-gopher/templ/archive"
 	"github.com/bmuschko/lets-gopher/templ/config"
 	"github.com/bmuschko/lets-gopher/templ/environment"
-	path2 "github.com/bmuschko/lets-gopher/templ/path"
 	"github.com/bmuschko/lets-gopher/templ/prompt"
+	"github.com/bmuschko/lets-gopher/templ/storage"
 	"github.com/spf13/cobra"
 	"io"
 	"path"
@@ -23,7 +23,7 @@ type projectCreateCmd struct {
 	targetDir       string
 	params          []string
 	out             io.Writer
-	home            path2.Home
+	home            storage.Home
 	archiver        archive.Archiver
 	prompter        prompt.Prompter
 }
