@@ -7,9 +7,7 @@ import (
 	"os"
 )
 
-var (
-	version = "undefined"
-)
+var version = "undefined"
 
 func main() {
 	download.SetVersion(version)
