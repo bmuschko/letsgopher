@@ -196,3 +196,12 @@ $ zip -r hello-world-0.2.0.zip .
 ----
 
 Now, you can simply upload the ZIP file to a HTTP server of your choice for later consumption.
+
+== Limitations
+
+The project is still in its early stages. Currently, the following functionality is not supported.
+
+* Defining and executing custom logic for dynamically generating project structures e.g. if a user answers "yes" for a parameters then a new file is created with a specific name.
+* Before and after hooks that can run additional scripts.
+* Other template archive formats than .zip, for example .tar.gz.
+* Downloading template archives with other protocols than HTTP.
