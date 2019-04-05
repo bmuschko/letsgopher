@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
@@ -38,11 +39,11 @@ func TestCreateProjectWithRegisteredTemplate(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
-- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+- archivePath: %s
   name: hello-world
-  version: 1.0.0`), 0644)
+  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -71,11 +72,11 @@ func TestCreateProjectWithRegisteredTemplateAndDefinedParams(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
-- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+- archivePath: %s
   name: hello-world
-  version: 1.0.0`), 0644)
+  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -115,11 +116,11 @@ func TestCreateProjectWithRegisteredTemplateAndNonMatchingEnumParams(t *testing.
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
-- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+- archivePath: %s
   name: hello-world
-  version: 1.0.0`), 0644)
+  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -156,11 +157,11 @@ func TestCreateProjectWithRegisteredTemplateAndMatchingEnumParams(t *testing.T) 
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
-- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+- archivePath: %s
   name: hello-world
-  version: 1.0.0`), 0644)
+  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -197,11 +198,11 @@ func TestCreateProjectWithMisformedUserDefinedParams(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-15T16:31:57.232715-06:00"
+	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
-- archivePath: /my/path/new-project/hello-world-1.0.0.zip
+- archivePath: %s
   name: hello-world
-  version: 1.0.0`), 0644)
+  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}

@@ -9,7 +9,6 @@ import (
 	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/spf13/cobra"
 	"io"
-	"path"
 	"strings"
 )
 
@@ -56,12 +55,12 @@ func (c *projectCreateCmd) run() error {
 	if err != nil {
 		return err
 	}
-	if !f.Has(c.templateName, c.templateVersion) {
+
+	template := f.Get(c.templateName, c.templateVersion)
+	if template == nil {
 		return fmt.Errorf("template with name %q and version %q hasn't been installed", c.templateName, c.templateVersion)
 	}
-
-	templateName := c.templateName + "-" + c.templateVersion
-	templateZIP := path.Join(c.home.ArchiveDir(), templateName+".zip")
+	templateZIP := template.ArchivePath
 
 	tb, err := c.archiver.LoadManifestFile(templateZIP)
 	if err != nil {
