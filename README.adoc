@@ -1,64 +1,169 @@
-= Let's Gopher
+= Letsgopher
 
-Let's Gopher is a simple, yet flexible project generator for Go. The tool uses templates available in the directory `~/.lets-gopher/templates`. Users can create templates manually by creating directories and files as desired. Templates hosted on Git repositories can be downloaded and added to the template directory.
+Letsgopher is a simple, yet flexible project generator for Go. It uses templates bundled in ZIP files hosted on an HTTP server, downloads them on demand and generates a project structure from it.
 
-== Installing a template
+== Initializing the tool
 
-The project doesn't come with any templates out-of-the-box. You need to install them yourself. The tool will report missing templates in the console output.
+Upon its first use, letsgopher needs to initialize the local infrastructure. Run the init command to get started.
 
+[source,bash]
 ----
-go run main.go
-2019/01/17 13:30:20 No templates found!
-----
-
-Templates can only be installed from a Git URL. To install a template, run the `install` command with the `--url` parameter. The tool will clone the repository.
-
-----
-go run main.go install --url="https://github.com/bmuschko/go-helloworld-template.git"
-2019/01/17 13:32:21 Cloning template from repository https://github.com/bmuschko/go-helloworld-template.git
+$ letsgopher init
 ----
 
-Subsequent `install` operations pull the latest change from the originating repository.
+You will find that a new directory in your home directory named `.letsgopher`.
 
+[source,bash]
 ----
-go run main.go install --url="https://github.com/bmuschko/go-helloworld-template.git"
-2019/01/17 13:32:25 Pulling latest changes for existing template in /Users/bmuschko/.lets-gopher/templates/go-helloworld-template
+$ tree ~/.letsgopher
+.letsgopher
+├── archive
+└── templates.yaml
+
+1 directory, 1 file
 ----
 
-Alternatively, you can just create a new directory under `~/.lets-gopher/templates` and populate it with files.
+The directory contains the subdirectory `archive`. That's the location where template archive are stored after they have been downloaded. The file `templates.yaml` keeps track of all downloaded and usable templates.
+
+NOTE: Do not manually edit the `templates.yaml` file. Letsgopher provides management commands for installing and uninstalling templates.
+
+== Managing templates
+
+The project doesn't come with any templates out-of-the-box. You need to install them yourself. A template archive needs to be hosted on a HTTP server and follow the naming convention `<template-name>-<template-version>.<archive-extension>`.
+
+NOTE: The only supported archive type at the moment are ZIP files.
+
+The following example installs the archive `hello-world-0.2.0.zip` from a Dropbox URL and registers it with the name `my-world`.
+
+[source,bash]
+----
+$ letsgopher template install https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-0.2.0.zip my-world
+"my-world" has been added to your templates
+----
+
+Installed templates can be listed with the `list` command. As you can see the output, the provided template name can help you provide descriptive name in case the ZIP files name doesn't properly express its purpose.
+
+[source,bash]
+----
+$ letsgopher template list
+NAME       VERSION   ARCHIVE PATH
+my-world   0.2.0     /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
+----
+
+Templates can provide additional metadata. For example parameters can be defined to replace placeholder variable with actual values entered by the user when generating a new project from that template. To inspect the metadata of an installed template, use the `inspect` command.
+
+[source,bash]
+----
+$ letsgopher template inspect my-world 0.2.0
+template:
+  name: "my-world"
+  version: "0.2.0"
+manifest:
+  version: "0.1.0"
+  parameters:
+    - name: "module"
+      prompt: "Please provide a module name"
+      type: "string"
+      description: "The module name is used in the go.mod file"
+    - name: "message"
+      prompt: "Please select a message"
+      type: "string"
+      enum: ["Hello World!", "Let's get started", "This is just the beginning"]
+      description: "The message to be rendered when executing the program"
+----
+
+Sometimes you'll want to delete a template - maybe you are not using anymore or the version became outdated. The following command deletes the archive file and removes the template entry from the `templates.yaml` file.
+
+[source,bash]
+----
+$ letsgopher template uninstall my-world 0.2.0
+template "my-world" has been removed
+----
 
 == Generating projects from a template
 
-You can generate a new project from the template if at least one template can be found. The files of a selected template will be written to `$GOPATH/src/<base-path>`.
+After installing a template you can derive a completely new project from it. Run the `create` command to start the generation process. Letsgopher will ask you to interactively enter values for each parameter defined in the project metadata.
 
+[source,bash]
 ----
-go run main.go
-? What template would you like to use to generate a project?  [Use arrows to move, type to filter]
-❯ go-helloworld-template
-You choose "go-helloworld-template"
-? What base path would like to use? github.com/bmuschko/helloworld
-You choose "github.com/bmuschko/helloworld"
-Generating project in "/Users/bmuschko/go/src/github.com/bmuschko/helloworld"
+$ letsgopher create my-world 0.2.0 go-hello-world
+? Please provide a module name hello-world
+? Please select a message  [Use arrows to move, type to filter, ? for more help]
+  Hello World!
+❯ Let's get started
+  This is just the beginning
+created project at "go-hello-world"
 ----
 
-== Configuring default conventions
+Alternatively, you can ask pass in the parameter values with the command line option `--param` to avoid the interactive mode.
 
-You might get tired of having to spell out certain default values. For example, you'll likely want to use the same domain whenever you generate a new project. The tool can be configured in the file `~/.lets-gopher/.lets-gopher.yml`.
+[source,bash]
+----
+$ letsgopher create my-world 0.2.0 go-hello-world --param module=hello-world --param message="Let's get started"
+created project at "go-hello-world"
+----
+
+
+== Creating your own template
+
+A template defines the structure of a project including directories and files. Additionally, a template needs to add a `manifest.yaml` file to the root directory the project structure. The manifest file describes the metadata of a template. Files can use https://golang.org/pkg/text/template/[Go's templating mechanism] for replacing placeholders at project generation time.
+
+NOTE: Letsgopher automatically excludes the file `manifest.yaml` when generating a project.
+
+Let's say you want to build a very simple "Hello World!" Go template. The following directory structure shows the `main.go` file and the Go module file `go.mod`. It also contains the manifest file.
+
+[source,bash]
+----
+$ tree hello-world-0.2.0
+hello-world-0.2.0
+├── go.mod
+├── main.go
+└── manifest.yaml
+
+0 directories, 3 files
+----
+
+==== The manifest file
 
 [source,yaml]
 ----
-domain: github.com/bmuschko
+version: "0.1.0"
+parameters:
+  - name: "module"
+    prompt: "Please provide a module name"
+    type: "string"
+    description: "The module name is used in the go.mod file"
+  - name: "message"
+    prompt: "Please select a message"
+    type: "string"
+    enum: ["Hello World!", "Let's get started", "This is just the beginning"]
+    description: "The message to be rendered when executing the program"
 ----
 
-Configured default values are consumed as applicable but can still be reconfigured.
+[cols="1,1,2", options="header"]
+.Parameters
+|===
+|Name
+|Required
+|Description
 
-----
-go run main.go
-? What template would you like to use to generate a project?  [Use arrows to move, type to filter]
-❯ go-helloworld-template
-You choose "go-helloworld-template"
-? What base path would like to use? (github.com/bmuschko/go-helloworld-template)
-You choose "github.com/bmuschko/go-helloworld-template"
-Generating project in "/Users/bmuschko/go/src/github.com/bmuschko/go-helloworld-template"
-----
+|`name`
+|yes
+|The placeholder key uses in templates.
 
+|`prompt`
+|yes
+|The UI prompt in the interactive mode for requesting values from users.
+
+|`type`
+|yes
+|The type of a parameter. Valid values are `string`, `integer` and `boolean`.
+
+|`enum`
+|no
+|A list of allowed and selectable values for a parameter.
+
+|`description`
+|no
+|Describes the parameter purpose. Does not show up in the UI.
+|===
