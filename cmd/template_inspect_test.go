@@ -40,8 +40,14 @@ func TestInspectNonExistentTemplateName(t *testing.T) {
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates: []`)
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = templateInspect.run()
 
@@ -64,12 +70,18 @@ func TestInspectValidTemplate(t *testing.T) {
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
 	archiveFile := fmt.Sprintf("%s/archive/hello-world-1.0.0.zip", tmpHome)
-	f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
+	_, err = f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
   version: 1.0.0`, archiveFile))
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	aM.On("LoadManifestFile", archiveFile).Return([]byte(`version: "1.0.0"
 parameters:

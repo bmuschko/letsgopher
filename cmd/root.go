@@ -14,7 +14,7 @@ func NewRootCmd(args []string) *cobra.Command {
 	}
 
 	flags := cmd.PersistentFlags()
-	flags.Parse(args)
+	_ = flags.Parse(args)
 	out := cmd.OutOrStdout()
 
 	cmd.AddCommand(

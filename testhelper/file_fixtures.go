@@ -55,10 +55,7 @@ func CreateZip(filename string, files []TestFile) error {
 		return err
 	}
 	for _, f := range files {
-		err = os.Remove(f.Name)
-		if err != nil {
-			return err
-		}
+		os.Remove(f.Name)
 	}
 	return nil
 }
@@ -74,4 +71,12 @@ func ReadFile(file string) (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func CreateDir(dir string) error {
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
+	return nil
 }

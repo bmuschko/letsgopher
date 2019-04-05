@@ -40,10 +40,16 @@ func TestInitExistentHome(t *testing.T) {
 		home: storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
-	os.MkdirAll(archiveDir, 0755)
+	err := os.MkdirAll(archiveDir, 0755)
+	if err != nil {
+		t.Errorf("failed to create directory %s", archiveDir)
+	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
-	os.Create(templatesFile)
-	err := init.run()
+	_, err = os.Create(templatesFile)
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	err = init.run()
 
 	assert.Nil(t, err)
 	assert.DirExists(t, archiveDir)
@@ -61,10 +67,16 @@ func TestInitTemplateFileIsDirectory(t *testing.T) {
 		home: storage.Home(tmpHome),
 	}
 	archiveDir := filepath.Join(tmpHome, "archive")
-	os.MkdirAll(archiveDir, 0755)
+	err := os.MkdirAll(archiveDir, 0755)
+	if err != nil {
+		t.Errorf("failed to create directory %s", archiveDir)
+	}
 	templatesDir := filepath.Join(tmpHome, "templates.yaml")
-	os.MkdirAll(templatesDir, 0755)
-	err := init.run()
+	err = os.MkdirAll(templatesDir, 0755)
+	if err != nil {
+		t.Errorf("failed to create directory %s", archiveDir)
+	}
+	err = init.run()
 
 	assert.NotNil(t, err)
 	assert.Equal(t, fmt.Sprintf("%s must be a file, not a directory", templatesDir), err.Error())

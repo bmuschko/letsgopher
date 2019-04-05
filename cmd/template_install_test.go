@@ -34,7 +34,10 @@ templates: []`), 0644)
 	dM.On("Download", "http://my.repo.com/hello-world-1.0.0.zip").Return("/my/path/new-project/hello-world-1.0.0.zip", nil)
 	err = templateInstall.run()
 
-	templates, err := testhelper.ReadFile(f)
+	templates, e := testhelper.ReadFile(f)
+	if e != nil {
+		t.Errorf("failed to read file %s", f)
+	}
 
 	dM.AssertExpectations(t)
 	assert.Nil(t, err)

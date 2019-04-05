@@ -18,12 +18,15 @@ func TestExtractWithoutTemplateReplacement(t *testing.T) {
 		{"file1.txt", "This is a file1"},
 		{"file2.txt", "This is a file2"},
 	}
-	testhelper.CreateZip(archive, files)
+	err := testhelper.CreateZip(archive, files)
+	if err != nil {
+		t.Errorf("failed to create file %s", archive)
+	}
 	extractedDir := filepath.Join(tmpHome, "new-project")
 	manifestFile := filepath.Join(extractedDir, manifestFile)
 	extractedFile1 := filepath.Join(extractedDir, "file1.txt")
 	extractedFile2 := filepath.Join(extractedDir, "file2.txt")
-	err := archiver.Extract(archive, extractedDir, make(map[string]interface{}))
+	err = archiver.Extract(archive, extractedDir, make(map[string]interface{}))
 
 	assert.Nil(t, err)
 	assert.DirExists(t, extractedDir)
@@ -56,7 +59,10 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 		{"file1.txt", "This is a {( .a }}"},
 		{"file2.txt", "This is a {{ .b }}"},
 	}
-	testhelper.CreateZip(archive, files)
+	err := testhelper.CreateZip(archive, files)
+	if err != nil {
+		t.Errorf("failed to create file %s", archive)
+	}
 	extractedDir := filepath.Join(tmpHome, "new-project")
 	manifestFile := filepath.Join(extractedDir, manifestFile)
 	extractedFile1 := filepath.Join(extractedDir, "file1.txt")
@@ -64,7 +70,7 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 	replacements := make(map[string]interface{})
 	replacements["a"] = "file1"
 	replacements["b"] = "file2"
-	err := archiver.Extract(archive, extractedDir, replacements)
+	err = archiver.Extract(archive, extractedDir, replacements)
 
 	assert.Nil(t, err)
 	assert.DirExists(t, extractedDir)
@@ -93,7 +99,10 @@ func TestLoadExistingManifestFile(t *testing.T) {
 	files := []testhelper.TestFile{
 		{manifestFile, "version: \"1.0.0\""},
 	}
-	testhelper.CreateZip(archive, files)
+	err := testhelper.CreateZip(archive, files)
+	if err != nil {
+		t.Errorf("failed to create file %s", archive)
+	}
 	b, err := archiver.LoadManifestFile(archive)
 
 	assert.Nil(t, err)
@@ -110,7 +119,10 @@ func TestLoadNonExistentManifestFile(t *testing.T) {
 		{"file1.txt", "This is a {( .a }}"},
 		{"file2.txt", "This is a {{ .b }}"},
 	}
-	testhelper.CreateZip(archive, files)
+	err := testhelper.CreateZip(archive, files)
+	if err != nil {
+		t.Errorf("failed to create file %s", archive)
+	}
 	b, err := archiver.LoadManifestFile(archive)
 
 	assert.NotNil(t, err)

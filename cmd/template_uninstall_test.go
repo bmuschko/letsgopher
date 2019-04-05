@@ -36,16 +36,26 @@ func TestUninstallExistentTemplate(t *testing.T) {
 	defer aF.Close()
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s/archive/hello-world-1.0.0.zip
   name: hello-world
   version: 1.0.0
 `, tmpHome))
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = uninstall.run()
 
-	result, err := ioutil.ReadFile(templatesFile)
+	result, e := ioutil.ReadFile(templatesFile)
+	if e != nil {
+		t.Errorf("failed to read file %s", templatesFile)
+	}
+
 	assert.Nil(t, err)
 	testhelper.FileNotExists(t, archiveFile)
 	assert.Equal(t, `generated: "2019-03-15T16:31:57.232715-06:00"
@@ -78,12 +88,22 @@ func TestUninstallNonExistentTemplate(t *testing.T) {
 	defer aF.Close()
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates: []`)
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = uninstall.run()
 
-	result, _ := ioutil.ReadFile(templatesFile)
+	result, e := ioutil.ReadFile(templatesFile)
+	if e != nil {
+		t.Errorf("failed to read file %s", templatesFile)
+	}
+
 	assert.NotNil(t, err)
 	assert.FileExists(t, archiveFile)
 	assert.Equal(t, `generated: "2019-03-15T16:31:57.232715-06:00"
@@ -110,16 +130,26 @@ func TestUninstallExistentArchiveFile(t *testing.T) {
 	archiveFile := fmt.Sprintf("%s/archive/hello-world-1.0.0.zip", tmpHome)
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s/archive/hello-world-1.0.0.zip
   name: hello-world
   version: 1.0.0
 `, archiveFile))
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = uninstall.run()
 
-	result, err := ioutil.ReadFile(templatesFile)
+	result, e := ioutil.ReadFile(templatesFile)
+	if e != nil {
+		t.Errorf("failed to read file %s", templatesFile)
+	}
+
 	assert.Nil(t, err)
 	testhelper.FileNotExists(t, archiveFile)
 	assert.Equal(t, `generated: "2019-03-15T16:31:57.232715-06:00"

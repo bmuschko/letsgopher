@@ -36,8 +36,14 @@ func TestEmptyTemplateList(t *testing.T) {
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates: []`)
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = templateList.run()
 
@@ -56,11 +62,17 @@ func TestPopulatedTemplateList(t *testing.T) {
 	}
 	templatesFile := filepath.Join(tmpHome, "templates.yaml")
 	f, err := os.Create(templatesFile)
-	f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
+	if err != nil {
+		t.Errorf("failed to create file %s", templatesFile)
+	}
+	_, err = f.WriteString(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
   name: hello-world
   version: 0.2.0`)
+	if err != nil {
+		t.Errorf("failed to write to file %s", f.Name())
+	}
 	defer f.Close()
 	err = templateList.run()
 

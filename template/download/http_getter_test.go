@@ -20,7 +20,10 @@ func TestGetForZipFile(t *testing.T) {
 		{"file1.txt", "This is a file1"},
 		{"file2.txt", "This is a file2"},
 	}
-	testhelper.CreateZip(zipFile, files)
+	err := testhelper.CreateZip(zipFile, files)
+	if err != nil {
+		t.Errorf("failed to load file %s", zipFile)
+	}
 
 	h := &TestFileHandler{zipFile: zipFile}
 	server := httptest.NewServer(h)
@@ -43,7 +46,16 @@ func (h *TestFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer f.Close()
 
 	b := make([]byte, 512)
-	f.Read(b)
-	f.Seek(0, 0)
-	io.Copy(w, f)
+	_, err := f.Read(b)
+	if err != nil {
+		panic(err)
+	}
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		panic(err)
+	}
+	_, err = io.Copy(w, f)
+	if err != nil {
+		panic(err)
+	}
 }
