@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// FileNotExists asserts that a given file should exist.
 func FileNotExists(t *testing.T, path string, msgAndArgs ...interface{}) bool {
 	t.Helper()
 	info, err := os.Lstat(path)

@@ -13,7 +13,7 @@ type TemplatesFile struct {
 	Templates []*Template `json:"templates"`
 }
 
-// Templates represents a template in the local registry.
+// Template represents a template in the local registry.
 type Template struct {
 	Name        string `json:"name"`
 	Version     string `json:"version"`

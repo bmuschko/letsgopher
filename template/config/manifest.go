@@ -10,9 +10,15 @@ import (
 
 const (
 	maxCompatManifestVersion = "1.0.0"
-	StringType               = "string"
-	IntegerType              = "integer"
-	BooleanType              = "boolean"
+
+	// StringType represents the representation of a string parameter type.
+	StringType = "string"
+
+	// IntegerType represents the representation of a integer parameter type.
+	IntegerType = "integer"
+
+	// BooleanType represents the representation of a boolean parameter type.
+	BooleanType = "boolean"
 )
 
 // ManifestFile represents a template's metadata.

@@ -10,12 +10,12 @@ import (
 
 var version string
 
-// Sets the application version for use in HTTP request header.
+// SetVersion sets the application version for use in HTTP request header.
 func SetVersion(v string) {
 	version = v
 }
 
-// HttpGetter is the default HTTP backend handler.
+// HTTPGetter is the default HTTP backend handler.
 type HTTPGetter struct {
 	client *http.Client
 }

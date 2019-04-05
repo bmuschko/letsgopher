@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-// This helper builds paths relative to a Home directory.
+// Home is a helper for building paths relative to a Home directory.
 type Home string
 
 // String returns Home as a string.
