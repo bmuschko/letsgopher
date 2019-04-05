@@ -33,6 +33,8 @@ The project doesn't come with any templates out-of-the-box. You need to install 
 
 NOTE: The only supported archive type at the moment are ZIP files.
 
+=== Installing a template
+
 The following example installs the archive `hello-world-0.2.0.zip` from a Dropbox URL and registers it with the name `my-world`.
 
 [source,bash]
@@ -40,6 +42,8 @@ The following example installs the archive `hello-world-0.2.0.zip` from a Dropbo
 $ letsgopher template install https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-0.2.0.zip my-world
 "my-world" has been added to your templates
 ----
+
+=== Listing installed templates
 
 Installed templates can be listed with the `list` command. As you can see the output, the provided template name can help you provide descriptive name in case the ZIP files name doesn't properly express its purpose.
 
@@ -49,6 +53,8 @@ $ letsgopher template list
 NAME       VERSION   ARCHIVE PATH
 my-world   0.2.0     /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
 ----
+
+=== Inspecting an installed template
 
 Templates can provide additional metadata. For example parameters can be defined to replace placeholder variable with actual values entered by the user when generating a new project from that template. To inspect the metadata of an installed template, use the `inspect` command.
 
@@ -71,6 +77,8 @@ manifest:
       enum: ["Hello World!", "Let's get started", "This is just the beginning"]
       description: "The message to be rendered when executing the program"
 ----
+
+=== Uninstalling a template
 
 Sometimes you'll want to delete a template - maybe you are not using anymore or the version became outdated. The following command deletes the archive file and removes the template entry from the `templates.yaml` file.
 
@@ -103,14 +111,13 @@ $ letsgopher create my-world 0.2.0 go-hello-world --param module=hello-world --p
 created project at "go-hello-world"
 ----
 
-
 == Creating your own template
 
 A template defines the structure of a project including directories and files. Additionally, a template needs to add a `manifest.yaml` file to the root directory the project structure. The manifest file describes the metadata of a template. Files can use https://golang.org/pkg/text/template/[Go's templating mechanism] for replacing placeholders at project generation time.
 
 NOTE: Letsgopher automatically excludes the file `manifest.yaml` when generating a project.
 
-Let's say you want to build a very simple "Hello World!" Go template. The following directory structure shows the `main.go` file and the Go module file `go.mod`. It also contains the manifest file.
+Let's say you want to build a very simple "Hello World!" Go template. The following directory structure shows the `main.go` file and the Go module file `go.mod`. The directory also contains the manifest file.
 
 [source,bash]
 ----
@@ -123,7 +130,11 @@ hello-world-0.2.0
 0 directories, 3 files
 ----
 
+Next, we'll have a look at the metadata that has to be defined for a template.
+
 ==== The manifest file
+
+The manifest file has to have the name `manifest.yaml`. It contains a version which ensures that updates to the YAML structure can be made in the future. The current supported version is `0.1.0`. A manifest may optionally declare parameters. Specified parameters request an input from the user. The captured value is used to replace placeholders in template files at the time of project generation. The following `manifest.yaml` demonstrates a typical example:
 
 [source,yaml]
 ----
@@ -139,6 +150,8 @@ parameters:
     enum: ["Hello World!", "Let's get started", "This is just the beginning"]
     description: "The message to be rendered when executing the program"
 ----
+
+A template can define any number of parameters. Some attributes are mandatory, some of them are optional. See the following table for an overview on the different attributes:
 
 [cols="1,1,2", options="header"]
 .Parameters
@@ -167,3 +180,19 @@ parameters:
 |no
 |Describes the parameter purpose. Does not show up in the UI.
 |===
+
+=== Creating the template archive
+
+At the moment there's no tooling for creating an archive for the template from within letsgopher. The ZIP file name has to follow the convention <template-name>-<template-version>.<archive-extension>. You can simply run the zip command to create the file, as shown below.
+
+[source,bash]
+----
+$ cd hello-world-0.2.0
+$ zip -r hello-world-0.2.0.zip .
+  adding: go.mod (deflated 10%)
+  adding: .gitignore (stored 0%)
+  adding: manifest.yaml (deflated 45%)
+  adding: main.go (deflated 7%)
+----
+
+Now, you can simply upload the ZIP file to a HTTP server of your choice for later consumption.
