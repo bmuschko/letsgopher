@@ -34,62 +34,62 @@ func (a *ZIPArchiver) Extract(archiveFile string, targetDir string, replacements
 		return err
 	}
 
-	extractAndWriteFile := func(f *zip.File) error {
-		rc, err := f.Open()
+	for _, f := range r.File {
+		err := a.extractAndWriteFile(f, targetDir, replacements)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (a *ZIPArchiver) extractAndWriteFile(f *zip.File, targetDir string, replacements map[string]interface{}) error {
+	rc, err := f.Open()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := rc.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	path := filepath.Join(targetDir, f.Name)
+
+	if f.FileInfo().IsDir() {
+		err := os.MkdirAll(path, f.Mode())
+		if err != nil {
+			return err
+		}
+	} else {
+		// ignore manifest file
+		if filepath.Base(path) == manifestFile {
+			return nil
+		}
+		err := os.MkdirAll(filepath.Dir(path), f.Mode())
+		if err != nil {
+			return err
+		}
+		f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 		if err != nil {
 			return err
 		}
 		defer func() {
-			if err := rc.Close(); err != nil {
+			if err := f.Close(); err != nil {
 				panic(err)
 			}
 		}()
 
-		path := filepath.Join(targetDir, f.Name)
-
-		if f.FileInfo().IsDir() {
-			err := os.MkdirAll(path, f.Mode())
-			if err != nil {
-				return err
-			}
-		} else {
-			// ignore manifest file
-			if filepath.Base(path) == manifestFile {
-				return nil
-			}
-			err := os.MkdirAll(filepath.Dir(path), f.Mode())
-			if err != nil {
-				return err
-			}
-			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
-			if err != nil {
-				return err
-			}
-			defer func() {
-				if err := f.Close(); err != nil {
-					panic(err)
-				}
-			}()
-
-			b, err := ioutil.ReadAll(rc)
-			if err != nil {
-				return nil
-			}
-			err = a.Processor.Process(b, f, replacements)
-			if err != nil {
-				return nil
-			}
-		}
-		return nil
-	}
-
-	for _, f := range r.File {
-		err := extractAndWriteFile(f)
+		b, err := ioutil.ReadAll(rc)
 		if err != nil {
-			return err
+			return nil
+		}
+		err = a.Processor.Process(b, f, replacements)
+		if err != nil {
+			return nil
 		}
 	}
-
 	return nil
 }
 
