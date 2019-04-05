@@ -16,7 +16,7 @@ You will find that a new directory in your home directory named `.letsgopher`.
 [source,bash]
 ----
 $ tree ~/.letsgopher
-.letsgopher
+/Users/bmuschko/.letsgopher
 ├── archive
 └── templates.yaml
 
@@ -29,11 +29,18 @@ NOTE: Do not manually edit the `templates.yaml` file. Letsgopher provides manage
 
 == Managing templates
 
-The project doesn't come with any templates out-of-the-box. You need to install them yourself. A template archive needs to be hosted on a HTTP server and follow the naming convention `<template-name>-<template-version>.<archive-extension>`.
+The project doesn't come with any templates out-of-the-box. You need to install them yourself. A template archive needs to be hosted on a HTTP server and follow the naming convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`.
 
 NOTE: The only supported archive type at the moment are ZIP files.
 
 === Installing a template
+
+To download and install a template, run the `template install` command.
+
+[source,bash]
+----
+$ letsgopher template install [ARCHIVE-URL] [TEMPLATE-NAME]
+----
 
 The following example installs the archive `hello-world-0.2.0.zip` from a Dropbox URL and registers it with the name `my-world`.
 
@@ -45,7 +52,14 @@ $ letsgopher template install https://dl.dropboxusercontent.com/s/002j89do6epotq
 
 === Listing installed templates
 
-Installed templates can be listed with the `list` command. As you can see the output, the provided template name can help you provide descriptive name in case the ZIP files name doesn't properly express its purpose.
+Installed templates can be listed with the `list` command.
+
+[source,bash]
+----
+$ letsgopher template list
+----
+
+As you can see the following output, the provided template name can help you provide descriptive name in case the ZIP files name doesn't properly express its purpose.
 
 [source,bash]
 ----
@@ -57,6 +71,13 @@ my-world   0.2.0     /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
 === Inspecting an installed template
 
 Templates can provide additional metadata. For example parameters can be defined to replace placeholder variable with actual values entered by the user when generating a new project from that template. To inspect the metadata of an installed template, use the `inspect` command.
+
+[source,bash]
+----
+$ letsgopher template inspect [TEMPLATE-NAME] [TEMPLATE-VERSION]
+----
+
+The command line output below shows the metadata for the `my-world` template with version `0.2.0`.
 
 [source,bash]
 ----
@@ -80,7 +101,14 @@ manifest:
 
 === Uninstalling a template
 
-Sometimes you'll want to delete a template - maybe you are not using anymore or the version became outdated. The following command deletes the archive file and removes the template entry from the `templates.yaml` file.
+Sometimes you'll want to delete a template - maybe you are not using anymore or the version became outdated. The `uninstall` command deletes the archive file on your local disk and removes the template entry from the `templates.yaml` file.
+
+[source,bash]
+----
+$ letsgopher template uninstall [TEMPLATE-NAME] [TEMPLATE-VERSION]
+----
+
+The following command execution deletes the template `my-world` with version `0.2.0`.
 
 [source,bash]
 ----
@@ -94,6 +122,13 @@ After installing a template you can derive a completely new project from it. Run
 
 [source,bash]
 ----
+$ letsgopher template create [TEMPLATE-NAME] [TEMPLATE-VERSION] [PROJECT-NAME]
+----
+
+As you can see in the command line output below, letsgophers prompts the user with the help of different UI elements.
+
+[source,bash]
+----
 $ letsgopher create my-world 0.2.0 go-hello-world
 ? Please provide a module name hello-world
 ? Please select a message  [Use arrows to move, type to filter, ? for more help]
@@ -103,7 +138,7 @@ $ letsgopher create my-world 0.2.0 go-hello-world
 created project at "go-hello-world"
 ----
 
-Alternatively, you can ask pass in the parameter values with the command line option `--param` to avoid the interactive mode.
+Alternatively, you can ask pass in the parameter values with the command line option `--param` to forgo the interactive mode.
 
 [source,bash]
 ----
@@ -183,7 +218,7 @@ A template can define any number of parameters. Some attributes are mandatory, s
 
 === Creating the template archive
 
-At the moment there's no tooling for creating an archive for the template from within letsgopher. The ZIP file name has to follow the convention <template-name>-<template-version>.<archive-extension>. You can simply run the zip command to create the file, as shown below.
+At the moment there's no tooling for creating an archive for the template from within letsgopher. The ZIP file name has to follow the convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`. You can simply run the zip command to create the file, as shown below.
 
 [source,bash]
 ----
