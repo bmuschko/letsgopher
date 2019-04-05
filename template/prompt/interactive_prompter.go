@@ -8,9 +8,11 @@ import (
 	"strconv"
 )
 
+// InteractivePrompter ask for user input interactively on the console.
 type InteractivePrompter struct {
 }
 
+// Prompt requests user input from the console.
 func (ip *InteractivePrompter) Prompt(p *config.Parameter, replacements map[string]interface{}) error {
 	core.SetFancyIcons()
 

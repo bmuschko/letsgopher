@@ -7,11 +7,13 @@ import (
 	"strings"
 )
 
+// TemplateDownloader retrieves a template archive from an URL.
 type TemplateDownloader struct {
 	Home   storage.Home
 	Getter Getter
 }
 
+// Download downloads a template archive from an URL.
 func (td *TemplateDownloader) Download(url string) (string, error) {
 	data, err := td.Getter.Get(url)
 	if err != nil {

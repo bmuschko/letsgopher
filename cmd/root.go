@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// NewRootCmd creates the root command of the application.
 func NewRootCmd(args []string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "letsgopher",

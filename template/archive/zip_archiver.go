@@ -12,10 +12,12 @@ import (
 
 const manifestFile = "manifest.yaml"
 
+// ZIPArchiver handles ZIP archive files.
 type ZIPArchiver struct {
 	Processor Processor
 }
 
+// Extract expands the contents of a ZIP file.
 func (a *ZIPArchiver) Extract(archiveFile string, targetDir string, replacements map[string]interface{}) error {
 	r, err := zip.OpenReader(archiveFile)
 	if err != nil {
@@ -91,6 +93,7 @@ func (a *ZIPArchiver) Extract(archiveFile string, targetDir string, replacements
 	return nil
 }
 
+// LoadManifestFile loads the manifest from a ZIP file.
 func (a *ZIPArchiver) LoadManifestFile(src string) ([]byte, error) {
 	r, err := zip.OpenReader(src)
 	if err != nil {

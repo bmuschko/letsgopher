@@ -7,8 +7,11 @@ import (
 )
 
 var defaultHome = filepath.Join(homeDir(), ".letsgopher")
+
+// Settings exposes the environment settings.
 var Settings = EnvSettings{Home: storage.Home(defaultHome)}
 
+// EnvSettings describes the environment settings.
 type EnvSettings struct {
 	Home storage.Home
 }

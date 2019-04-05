@@ -11,6 +11,7 @@ const appLabel = "letsgopher"
 
 var version string
 
+// SetVersion set the application version for consumption in the output of the command.
 func SetVersion(v string) {
 	version = v
 }

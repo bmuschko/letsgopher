@@ -6,10 +6,12 @@ import (
 	"strings"
 )
 
+// TemplateURLVerifier represents a helper for verifying the URL of a template.
 type TemplateURLVerifier struct {
 	URL string
 }
 
+// Verify checks the sanity of a given URL.
 func (t TemplateURLVerifier) Verify() error {
 	err := validateExt(t.URL)
 

@@ -10,14 +10,17 @@ import (
 
 var version string
 
+// Sets the application version for use in HTTP request header.
 func SetVersion(v string) {
 	version = v
 }
 
+// HttpGetter is the default HTTP backend handler.
 type HTTPGetter struct {
 	client *http.Client
 }
 
+// Get performs a Get from repo.Getter and returns the body.
 func (g *HTTPGetter) Get(href string) (*bytes.Buffer, error) {
 	return g.get(href)
 }
@@ -47,6 +50,7 @@ func (g *HTTPGetter) get(href string) (*bytes.Buffer, error) {
 	return buf, err
 }
 
+// NewHTTPGetter constructs a valid HTTP client as HttpGetter.
 func NewHTTPGetter() *HTTPGetter {
 	return &HTTPGetter{client: &http.Client{}}
 }

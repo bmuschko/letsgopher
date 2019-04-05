@@ -15,11 +15,13 @@ const (
 	BooleanType              = "boolean"
 )
 
+// ManifestFile represents a template's metadata.
 type ManifestFile struct {
 	Version    string       `json:"version"`
 	Parameters []*Parameter `json:"parameters"`
 }
 
+// Parameter represents a parameter defined as part of a template's metadata.
 type Parameter struct {
 	Name         string   `json:"name"`
 	Prompt       string   `json:"prompt"`
@@ -29,6 +31,7 @@ type Parameter struct {
 	DefaultValue string   `json:"defaultValue"`
 }
 
+// LoadManifestData unmarshals YAML content into a ManifestFile.
 func LoadManifestData(b []byte) (*ManifestFile, error) {
 	m := &ManifestFile{}
 	err := yaml.Unmarshal(b, m)
@@ -38,6 +41,7 @@ func LoadManifestData(b []byte) (*ManifestFile, error) {
 	return m, nil
 }
 
+// ValidateManifest validates the expected YAML structure of a manifest.
 func ValidateManifest(m *ManifestFile) error {
 	err := validateManifestVersion(m.Version)
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 
 var tmpDirs []string
 
+// TmpDir creates a new temporary directory for testing purposes.
 func TmpDir(t *testing.T, dir string, prefix string) string {
 	t.Helper()
 	tmpDir, err := ioutil.TempDir(dir, prefix)
@@ -20,6 +21,7 @@ func TmpDir(t *testing.T, dir string, prefix string) string {
 	return tmpDir
 }
 
+// CleanTmpDirs cleans up previously created temporary directories.
 func CleanTmpDirs(t *testing.T) {
 	for _, path := range tmpDirs {
 		if err := os.RemoveAll(path); err != nil {
@@ -30,6 +32,7 @@ func CleanTmpDirs(t *testing.T) {
 	tmpDirs = make([]string, 0)
 }
 
+// CreateZip creates a ZIP file for testing purposes.
 func CreateZip(filename string, files []TestFile) error {
 	outFile, err := os.Create(filename)
 	if err != nil {
@@ -60,23 +63,17 @@ func CreateZip(filename string, files []TestFile) error {
 	return nil
 }
 
+// TestFile is a text file for bundling with a ZIP file.
 type TestFile struct {
 	Name    string
 	Content string
 }
 
+// ReadFile reads the textual content of a file.
 func ReadFile(file string) (string, error) {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
 		return "", err
 	}
 	return string(b), nil
-}
-
-func CreateDir(dir string) error {
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		return err
-	}
-	return nil
 }
