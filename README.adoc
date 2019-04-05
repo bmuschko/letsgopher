@@ -1,4 +1,4 @@
-= Letsgopher image:https://travis-ci.org/bmuschko/letsgopher.svg?branch=master["Build Status", link="https://travis-ci.org/bmuschko/letsgopher"] image:https://goreportcard.com/badge/github.com/bmuschko/letsgopher["Go Report Card", link="https://goreportcard.com/report/github.com/bmuschko/letsgopher"] image:https://codecov.io/gh/bmuschko/letsgopher/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/bmuschko/letsgopher"]
+= Letsgopher image:https://travis-ci.org/bmuschko/letsgopher.svg?branch=master["Build Status", link="https://travis-ci.org/bmuschko/letsgopher"] image:https://goreportcard.com/badge/github.com/bmuschko/letsgopher, link="https://goreportcard.com/report/github.com/bmuschko/letsgopher"] image:https://codecov.io/gh/bmuschko/letsgopher/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/bmuschko/letsgopher"]
 
 Letsgopher is a simple, yet flexible project generator for Go projects. It uses templates bundled in ZIP files hosted on an HTTP server, downloads them on demand and generates a project structure from it.
 
