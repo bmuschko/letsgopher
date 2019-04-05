@@ -39,11 +39,12 @@ func TestCreateProjectWithRegisteredTemplate(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
+	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
 	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
-  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
+  version: 1.0.0`, archiveZip)), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -58,8 +59,8 @@ templates:
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	aM.On("LoadManifestFile", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte("version: \"1.0.0\""), nil)
-	aM.On("Extract", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip", "/target", make(map[string]interface{})).Return(nil)
+	aM.On("LoadManifestFile", archiveZip).Return([]byte("version: \"1.0.0\""), nil)
+	aM.On("Extract", archiveZip, "/target", make(map[string]interface{})).Return(nil)
 	err = projectCreate.run()
 
 	aM.AssertExpectations(t)
@@ -72,11 +73,12 @@ func TestCreateProjectWithRegisteredTemplateAndDefinedParams(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
+	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
 	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
-  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
+  version: 1.0.0`, archiveZip)), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -95,7 +97,7 @@ templates:
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	aM.On("LoadManifestFile", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+	aM.On("LoadManifestFile", archiveZip).Return([]byte(`version: "1.0.0"
 parameters:
   - name: "param1"
     prompt: "Please provide a value for parameter 1"
@@ -103,7 +105,7 @@ parameters:
   - name: "param2"
     prompt: "Please provide a value for parameter 2"
     type: "string"`), nil)
-	aM.On("Extract", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip", "/target", map[string]interface{}{"param1": "hello", "param2": "world"}).Return(nil)
+	aM.On("Extract", archiveZip, "/target", map[string]interface{}{"param1": "hello", "param2": "world"}).Return(nil)
 	err = projectCreate.run()
 
 	aM.AssertExpectations(t)
@@ -116,11 +118,12 @@ func TestCreateProjectWithRegisteredTemplateAndNonMatchingEnumParams(t *testing.
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
+	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
 	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
-  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
+  version: 1.0.0`, archiveZip)), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -139,7 +142,7 @@ templates:
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	aM.On("LoadManifestFile", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+	aM.On("LoadManifestFile", archiveZip).Return([]byte(`version: "1.0.0"
 parameters:
   - name: "param1"
     prompt: "Please provide a value for parameter 1"
@@ -157,11 +160,12 @@ func TestCreateProjectWithRegisteredTemplateAndMatchingEnumParams(t *testing.T) 
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
+	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
 	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
-  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
+  version: 1.0.0`, archiveZip)), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -179,13 +183,13 @@ templates:
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	aM.On("LoadManifestFile", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+	aM.On("LoadManifestFile", archiveZip).Return([]byte(`version: "1.0.0"
 parameters:
   - name: "param1"
     prompt: "Please provide a value for parameter 1"
     type: "string"
     enum: ["a", "hello", "c"]`), nil)
-	aM.On("Extract", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip", "/target", map[string]interface{}{"param1": "hello"}).Return(nil)
+	aM.On("Extract", archiveZip, "/target", map[string]interface{}{"param1": "hello"}).Return(nil)
 	err = projectCreate.run()
 
 	aM.AssertExpectations(t)
@@ -198,11 +202,12 @@ func TestCreateProjectWithMisformedUserDefinedParams(t *testing.T) {
 	defer testhelper.CleanTmpDirs(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
+	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
 	err := ioutil.WriteFile(f, []byte(fmt.Sprintf(`generated: "2019-03-15T16:31:57.232715-06:00"
 templates:
 - archivePath: %s
   name: hello-world
-  version: 1.0.0`, storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip")), 0644)
+  version: 1.0.0`, archiveZip)), 0644)
 	if err != nil {
 		t.Error("could not write template file")
 	}
@@ -220,7 +225,7 @@ templates:
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	aM.On("LoadManifestFile", storage.Home(tmpHome).ArchiveDir()+"/hello-world-1.0.0.zip").Return([]byte(`version: "1.0.0"
+	aM.On("LoadManifestFile", archiveZip).Return([]byte(`version: "1.0.0"
 parameters:
   - name: "param1"
     prompt: "Please provide a value for parameter 1"
