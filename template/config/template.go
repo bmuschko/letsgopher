@@ -87,7 +87,7 @@ func (r *TemplatesFile) Update(re ...*Template) bool {
 	return found
 }
 
-// Removes an existing template from the registry.
+// Remove removes an existing template from the registry.
 func (r *TemplatesFile) Remove(name string, version string) bool {
 	cp := []*Template{}
 	found := false
