@@ -12,10 +12,12 @@ import (
 type InteractivePrompter struct {
 }
 
+func init() {
+	core.SetFancyIcons()
+}
+
 // Prompt requests user input from the console.
 func (ip *InteractivePrompter) Prompt(p *config.Parameter, replacements map[string]interface{}) error {
-	core.SetFancyIcons()
-
 	if p.Type == config.StringType {
 		value, err := promptString(p)
 		if err != nil {
