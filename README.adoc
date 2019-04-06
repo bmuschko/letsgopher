@@ -2,6 +2,8 @@
 
 Letsgopher is a simple, yet flexible project generator for Go projects. It uses templates bundled in ZIP files hosted on an HTTP server, downloads them on demand and generates a project structure from it.
 
+image::https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9.svg[link="https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9"]
+
 == Initializing the tool
 
 Upon its first use, letsgopher needs to initialize the local infrastructure. Run the init command to get started.
