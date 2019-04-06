@@ -51,34 +51,21 @@ func newCreateCmd(out io.Writer) *cobra.Command {
 }
 
 func (c *projectCreateCmd) run() error {
-	f, err := config.LoadTemplatesFile(c.home.TemplatesFile())
+	templateZIP, err := determineTemplateZIP(c)
 	if err != nil {
 		return err
 	}
 
-	template := f.Get(c.templateName, c.templateVersion)
-	if template == nil {
-		return fmt.Errorf("template with name %q and version %q hasn't been installed", c.templateName, c.templateVersion)
+	templateManifest, err := loadTemplateManifest(templateZIP, c.archiver)
+	if err != nil {
+		return err
 	}
-	templateZIP := template.ArchivePath
 
-	tb, err := c.archiver.LoadManifestFile(templateZIP)
-	if err != nil {
-		return err
-	}
-	m, err := config.LoadManifestData(tb)
-	if err != nil {
-		return err
-	}
-	err = config.ValidateManifest(m)
-	if err != nil {
-		return err
-	}
 	userDefinedParams, err := mapUserDefinedParams(c.params)
 	if err != nil {
 		return err
 	}
-	r, err := requestParameterValues(userDefinedParams, m.Parameters, c.prompter)
+	r, err := requestParameterValues(userDefinedParams, templateManifest.Parameters, c.prompter)
 	if err != nil {
 		return err
 	}
@@ -89,6 +76,35 @@ func (c *projectCreateCmd) run() error {
 	}
 	fmt.Fprintf(c.out, "created project at %q\n", c.targetDir)
 	return err
+}
+
+func determineTemplateZIP(c *projectCreateCmd) (string, error) {
+	f, err := config.LoadTemplatesFile(c.home.TemplatesFile())
+	if err != nil {
+		return "", err
+	}
+
+	template := f.Get(c.templateName, c.templateVersion)
+	if template == nil {
+		return "", fmt.Errorf("template with name %q and version %q hasn't been installed", c.templateName, c.templateVersion)
+	}
+	return template.ArchivePath, nil
+}
+
+func loadTemplateManifest(templateZIP string, archiver archive.Archiver) (*config.ManifestFile, error) {
+	tb, err := archiver.LoadManifestFile(templateZIP)
+	if err != nil {
+		return nil, err
+	}
+	m, err := config.LoadManifestData(tb)
+	if err != nil {
+		return nil, err
+	}
+	err = config.ValidateManifest(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func mapUserDefinedParams(params []string) (map[string]string, error) {
