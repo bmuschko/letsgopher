@@ -4,6 +4,10 @@ Letsgopher is a simple, yet flexible project generator for Go projects. It uses 
 
 image::https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9.svg[link="https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9?autoplay=1"]
 
+== Installation
+
+Simply download one of the https://github.com/bmuschko/letsgopher/releases[pre-built binaries] and add it to your `PATH` environment variable.
+
 == Initializing the tool
 
 Upon its first use, letsgopher needs to initialize the local infrastructure. Run the init command to get started.
