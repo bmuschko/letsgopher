@@ -7,7 +7,6 @@ import (
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -20,8 +19,8 @@ func TestInitNonExistentHome(t *testing.T) {
 		out:  b,
 		home: storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	err := init.run()
 
 	assert.Nil(t, err)
@@ -39,12 +38,12 @@ func TestInitExistentHome(t *testing.T) {
 		out:  b,
 		home: storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
 	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Errorf("failed to create directory %s", archiveDir)
 	}
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	_, err = os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
@@ -66,12 +65,12 @@ func TestInitTemplateFileIsDirectory(t *testing.T) {
 		out:  b,
 		home: storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
 	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Errorf("failed to create directory %s", archiveDir)
 	}
-	templatesDir := filepath.Join(tmpHome, "templates.yaml")
+	templatesDir := storage.Home(tmpHome).TemplatesFile()
 	err = os.MkdirAll(templatesDir, 0755)
 	if err != nil {
 		t.Errorf("failed to create directory %s", archiveDir)

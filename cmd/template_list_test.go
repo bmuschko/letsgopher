@@ -6,7 +6,6 @@ import (
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -34,7 +33,7 @@ func TestEmptyTemplateList(t *testing.T) {
 		out:  b,
 		home: storage.Home(tmpHome),
 	}
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
@@ -60,7 +59,7 @@ func TestPopulatedTemplateList(t *testing.T) {
 		out:  b,
 		home: storage.Home(tmpHome),
 	}
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)

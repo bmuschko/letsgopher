@@ -30,7 +30,7 @@ func TestDownloadSuccessfully(t *testing.T) {
 	gM := new(GetterMock)
 	downloader := &TemplateDownloader{Getter: gM, Home: storage.Home(tmpHome)}
 	url := "https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-1.0.0.zip"
-	targetDir := filepath.Join(tmpHome, "archive")
+	targetDir := storage.Home(tmpHome).ArchiveDir()
 	err = os.MkdirAll(targetDir, os.ModePerm)
 	if err != nil {
 		t.Errorf("failed to create directory %s", targetDir)

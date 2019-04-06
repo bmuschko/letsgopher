@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/bmuschko/lets-gopher/template/storage"
 	"github.com/bmuschko/lets-gopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -163,7 +164,7 @@ func TestReadTemplateFile(t *testing.T) {
 	tmpHome := testhelper.TmpDir(t, "", "test")
 	defer testhelper.CleanTmpDirs(t)
 
-	f := filepath.Join(tmpHome, "template.yaml")
+	f := storage.Home(tmpHome).TemplatesFile()
 	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
 templates:
   - archivePath: /my/path/archive/hello-world-1.0.0.zip

@@ -23,7 +23,7 @@ func TestUninstallExistentTemplate(t *testing.T) {
 		out:             b,
 		home:            storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
 	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
@@ -34,7 +34,7 @@ func TestUninstallExistentTemplate(t *testing.T) {
 		t.Fatalf("failed to create archive file %s", archiveFile)
 	}
 	defer aF.Close()
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
@@ -75,7 +75,7 @@ func TestUninstallNonExistentTemplate(t *testing.T) {
 		out:             b,
 		home:            storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
 	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
@@ -86,7 +86,7 @@ func TestUninstallNonExistentTemplate(t *testing.T) {
 		t.Fatalf("failed to create archive file %s", archiveFile)
 	}
 	defer aF.Close()
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
@@ -122,13 +122,13 @@ func TestUninstallExistentArchiveFile(t *testing.T) {
 		out:             b,
 		home:            storage.Home(tmpHome),
 	}
-	archiveDir := filepath.Join(tmpHome, "archive")
+	archiveDir := storage.Home(tmpHome).ArchiveDir()
 	err := os.MkdirAll(archiveDir, 0755)
 	if err != nil {
 		t.Fatalf("failed to create archive directory %s", archiveDir)
 	}
 	archiveFile := fmt.Sprintf("%s/archive/hello-world-1.0.0.zip", tmpHome)
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)

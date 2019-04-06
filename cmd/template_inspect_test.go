@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -38,7 +37,7 @@ func TestInspectNonExistentTemplateName(t *testing.T) {
 		out:             b,
 		home:            storage.Home(tmpHome),
 	}
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
@@ -68,7 +67,7 @@ func TestInspectValidTemplate(t *testing.T) {
 		home:            storage.Home(tmpHome),
 		archiver:        aM,
 	}
-	templatesFile := filepath.Join(tmpHome, "templates.yaml")
+	templatesFile := storage.Home(tmpHome).TemplatesFile()
 	f, err := os.Create(templatesFile)
 	if err != nil {
 		t.Errorf("failed to create file %s", templatesFile)
