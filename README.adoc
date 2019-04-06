@@ -45,11 +45,11 @@ To download and install a template, run the `template install` command.
 $ letsgopher template install [ARCHIVE-URL] [TEMPLATE-NAME]
 ----
 
-The following example installs the archive `hello-world-0.2.0.zip` from a Dropbox URL and registers it with the name `my-world`.
+The following example installs the archive `hello-world-0.2.0.zip` from a Dropbox URL and registers it with the name `basic`.
 
 ----
-$ letsgopher template install https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-0.2.0.zip my-world
-"my-world" has been added to your templates
+$ letsgopher template install https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-0.2.0.zip basic
+"basic" has been added to your templates
 ----
 
 === Listing installed templates
@@ -64,8 +64,8 @@ As you can see the following output, the provided template name can help you pro
 
 ----
 $ letsgopher template list
-NAME       VERSION   ARCHIVE PATH
-my-world   0.2.0     /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
+NAME    VERSION   ARCHIVE PATH
+basic   0.2.0     /Users/bmuschko/.letsgopher/archive/hello-world-0.2.0.zip
 ----
 
 === Inspecting an installed template
@@ -76,12 +76,12 @@ Templates can provide additional metadata. For example parameters can be defined
 $ letsgopher template inspect [TEMPLATE-NAME] [TEMPLATE-VERSION]
 ----
 
-The command line output below shows the metadata for the `my-world` template with version `0.2.0`.
+The command line output below shows the metadata for the `basic` template with version `0.2.0`.
 
 ----
-$ letsgopher template inspect my-world 0.2.0
+$ letsgopher template inspect basic 0.2.0
 template:
-  name: "my-world"
+  name: "basic"
   version: "0.2.0"
 manifest:
   version: "0.1.0"
@@ -105,10 +105,10 @@ Sometimes you'll want to delete a template - maybe you are not using anymore or 
 $ letsgopher template uninstall [TEMPLATE-NAME] [TEMPLATE-VERSION]
 ----
 
-The following command execution deletes the template `my-world` with version `0.2.0`.
+The following command execution deletes the template `basic` with version `0.2.0`.
 
 ----
-$ letsgopher template uninstall my-world 0.2.0
+$ letsgopher template uninstall basic 0.2.0
 template "my-world" has been removed
 ----
 
@@ -123,7 +123,7 @@ $ letsgopher template create [TEMPLATE-NAME] [TEMPLATE-VERSION] [PROJECT-NAME]
 As you can see in the command line output below, letsgophers prompts the user with the help of different UI elements.
 
 ----
-$ letsgopher create my-world 0.2.0 go-hello-world
+$ letsgopher create basic 0.2.0 go-hello-world
 ? Please provide a module name hello-world
 ? Please select a message  [Use arrows to move, type to filter, ? for more help]
   Hello World!
@@ -135,7 +135,7 @@ created project at "go-hello-world"
 Alternatively, you can ask pass in the parameter values with the command line option `--param` to forgo the interactive mode.
 
 ----
-$ letsgopher create my-world 0.2.0 go-hello-world --param module=hello-world --param message="Let's get started"
+$ letsgopher create basic 0.2.0 go-hello-world --param module=hello-world --param message="Let's get started"
 created project at "go-hello-world"
 ----
 
