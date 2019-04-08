@@ -6,12 +6,30 @@ import (
 	"strings"
 )
 
+const globalUsage = `A simple, yet flexible project generator for Go projects.
+
+To begin working with letsgopher, run the 'letsgopher init' command:
+
+	$ letsgopher init
+
+This will set up any necessary local configuration.
+You will only need to run this command once.
+
+Common actions from this point include:
+
+- letsgopher template install:   installs a new template
+- letsgopher template inspect:   inspects an already installed template
+- letsgopher template list:      lists all installed templates
+- letsgopher create:             creates a new project from a template
+
+`
+
 // NewRootCmd creates the root command of the application.
 func NewRootCmd(args []string) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "letsgopher",
-		Short: "Letsgopher is a project generator for Golang projects",
-		Long:  "A flexible and customizable project generator for Golang projects.",
+		Short: "A simple, yet flexible project generator for Go projects.",
+		Long:  globalUsage,
 	}
 
 	flags := cmd.PersistentFlags()
