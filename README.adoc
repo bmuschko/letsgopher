@@ -1,6 +1,6 @@
-= Letsgopher image:https://travis-ci.org/bmuschko/letsgopher.svg?branch=master["Build Status", link="https://travis-ci.org/bmuschko/letsgopher"] image:https://goreportcard.com/badge/github.com/bmuschko/letsgopher["Go Report Card", link="https://goreportcard.com/report/github.com/bmuschko/letsgopher"] image:https://codecov.io/gh/bmuschko/letsgopher/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/bmuschko/letsgopher"]
+= letsgopher image:https://travis-ci.org/bmuschko/letsgopher.svg?branch=master["Build Status", link="https://travis-ci.org/bmuschko/letsgopher"] image:https://goreportcard.com/badge/github.com/bmuschko/letsgopher["Go Report Card", link="https://goreportcard.com/report/github.com/bmuschko/letsgopher"] image:https://codecov.io/gh/bmuschko/letsgopher/branch/master/graph/badge.svg["Codecov", link="https://codecov.io/gh/bmuschko/letsgopher"]
 
-Letsgopher is a simple, yet flexible project generator for Go projects. It uses templates bundled in ZIP files hosted on an HTTP server, downloads them on demand and generates a project structure from it.
+A simple, yet flexible project generator for Go projects. It uses templates bundled in ZIP files hosted on an HTTP server, downloads them on demand and generates a project structure from it.
 
 image::https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9.svg[link="https://asciinema.org/a/DeyZit32MmnqInOwQJ66cZOp9?autoplay=1"]
 
@@ -29,7 +29,7 @@ $ tree ~/.letsgopher
 
 The directory contains the subdirectory `archive`. That's the location where template archive are stored after they have been downloaded. The file `templates.yaml` keeps track of all downloaded and usable templates.
 
-NOTE: Do not manually edit the `templates.yaml` file. Letsgopher provides management commands for installing and uninstalling templates.
+NOTE: Do not manually edit the `templates.yaml` file. The tool provides management commands for installing and uninstalling templates.
 
 == Managing templates
 
@@ -114,13 +114,13 @@ template "my-world" has been removed
 
 == Generating projects from a template
 
-After installing a template you can derive a completely new project from it. Run the `create` command to start the generation process. Letsgopher will ask you to interactively enter values for each parameter defined in the project metadata.
+After installing a template you can derive a completely new project from it. Run the `create` command to start the generation process. The command will ask you to interactively enter values for each parameter defined in the project metadata.
 
 ----
 $ letsgopher template create [TEMPLATE-NAME] [TEMPLATE-VERSION] [PROJECT-NAME]
 ----
 
-As you can see in the command line output below, letsgophers prompts the user with the help of different UI elements.
+As you can see in the command line output below, letsgopher prompts the user with the help of different UI elements.
 
 ----
 $ letsgopher create basic 0.2.0 go-hello-world
@@ -143,7 +143,7 @@ created project at "go-hello-world"
 
 A template defines the structure of a project including directories and files. Additionally, a template needs to add a `manifest.yaml` file to the root directory the project structure. The manifest file describes the metadata of a template. Files can use https://golang.org/pkg/text/template/[Go's templating mechanism] for replacing placeholders at project generation time.
 
-NOTE: Letsgopher automatically excludes the file `manifest.yaml` when generating a project.
+NOTE: letsgopher automatically excludes the file `manifest.yaml` when generating a project.
 
 Let's say you want to build a very simple "Hello World!" Go template. The following directory structure shows the `main.go` file and the Go module file `go.mod`. The directory also contains the manifest file.
 
