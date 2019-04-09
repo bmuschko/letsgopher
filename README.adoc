@@ -33,7 +33,7 @@ NOTE: Do not manually edit the `templates.yaml` file. The tool provides manageme
 
 == Managing templates
 
-The project doesn't come with any templates out-of-the-box. You need to install them yourself. A template archive needs to be hosted on a HTTP server and follow the naming convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`.
+The project doesn't come with any templates out-of-the-box. You need to install them yourself. A template archive needs to be hosted on a HTTP server and follow the naming convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`. The `[TEMPLATE-VERSION]` needs to follow the https://semver.org/[semantic versioning] scheme.
 
 NOTE: The only supported archive type at the moment are ZIP files.
 
@@ -210,7 +210,7 @@ A template can define any number of parameters. Some attributes are mandatory, s
 
 === Creating the template archive
 
-At the moment there's no tooling for creating an archive for the template from within letsgopher. The ZIP file name has to follow the convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`. You can simply run the zip command to create the file, as shown below.
+At the moment there's no tooling for creating an archive for the template from within letsgopher. The ZIP file name has to follow the convention `[TEMPLATE-NAME]-[TEMPLATE-VERSION].[ARCHIVE-EXTENSION]`. You can simply run the zip command to create the file, as shown below. The `[TEMPLATE-VERSION]` needs to follow the https://semver.org/[semantic versioning] scheme.
 
 ----
 $ cd hello-world-0.2.0
