@@ -3,16 +3,16 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
-	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 )
 
 func TestInitNonExistentHome(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
@@ -30,8 +30,8 @@ func TestInitNonExistentHome(t *testing.T) {
 }
 
 func TestInitExistentHome(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{
@@ -57,8 +57,8 @@ func TestInitExistentHome(t *testing.T) {
 }
 
 func TestInitTemplateFileIsDirectory(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	init := &initCmd{

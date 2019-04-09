@@ -1,8 +1,8 @@
 package config
 
 import (
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
-	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"path/filepath"
@@ -129,8 +129,8 @@ func TestInsertsUnknownTemplateOnUpdate(t *testing.T) {
 }
 
 func TestWriteTemplateFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	templatesFile := NewTemplatesFile()
 	helloWorldTemplate := &Template{Name: "hello-world", Version: "1.0.0", ArchivePath: "/my/path/archive/hello-world-1.0.0.zip"}
@@ -161,8 +161,8 @@ templates:
 }
 
 func TestReadTemplateFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"

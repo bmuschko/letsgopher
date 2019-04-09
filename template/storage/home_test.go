@@ -1,15 +1,15 @@
 package storage
 
 import (
-	"github.com/bmuschko/letsgopher/testhelper"
+	"github.com/Flaque/filet"
 	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
 )
 
 func TestHome(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	home := Home(tmpHome)
 	assert.Equal(t, tmpHome, home.String())

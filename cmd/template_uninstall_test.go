@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
 	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
@@ -13,8 +14,8 @@ import (
 )
 
 func TestUninstallExistentTemplate(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{
@@ -65,8 +66,8 @@ templates: []
 }
 
 func TestUninstallNonExistentTemplate(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{
@@ -112,8 +113,8 @@ templates: []`, string(result))
 }
 
 func TestUninstallExistentArchiveFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	uninstall := &templateUninstallCmd{

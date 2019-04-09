@@ -1,6 +1,7 @@
 package archive
 
 import (
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"path/filepath"
@@ -8,8 +9,8 @@ import (
 )
 
 func TestExtractWithoutTemplateReplacement(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -49,8 +50,8 @@ func TestExtractWithoutTemplateReplacement(t *testing.T) {
 func TestExtractWithTemplateReplacement(t *testing.T) {
 	t.Skip("template replacements are currently not working")
 
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -91,8 +92,8 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 }
 
 func TestLoadExistingManifestFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
@@ -110,8 +111,8 @@ func TestLoadExistingManifestFile(t *testing.T) {
 }
 
 func TestLoadNonExistentManifestFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}

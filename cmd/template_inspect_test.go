@@ -3,8 +3,8 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
-	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"os"
@@ -12,8 +12,8 @@ import (
 )
 
 func TestInspectNonExistentTemplateFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	templateInspect := &templateInspectCmd{
@@ -27,8 +27,8 @@ func TestInspectNonExistentTemplateFile(t *testing.T) {
 }
 
 func TestInspectNonExistentTemplateName(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	templateInspect := &templateInspectCmd{
@@ -55,8 +55,8 @@ templates: []`)
 }
 
 func TestInspectValidTemplate(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	aM := new(ArchiverMock)

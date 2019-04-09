@@ -1,6 +1,7 @@
 package download
 
 import (
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -12,8 +13,8 @@ import (
 )
 
 func TestGetForZipFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	zipFile := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	files := []testhelper.TestFile{

@@ -5,32 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"testing"
 )
-
-var tmpDirs []string
-
-// TmpDir creates a new temporary directory for testing purposes.
-func TmpDir(t *testing.T, dir string, prefix string) string {
-	t.Helper()
-	tmpDir, err := ioutil.TempDir(dir, prefix)
-	if err != nil {
-		t.Fatalf("failed to create temporary directory %s", tmpDir)
-	}
-	tmpDirs = append(tmpDirs, tmpDir)
-	return tmpDir
-}
-
-// CleanTmpDirs cleans up previously created temporary directories.
-func CleanTmpDirs(t *testing.T) {
-	for _, path := range tmpDirs {
-		if err := os.RemoveAll(path); err != nil {
-			t.Errorf("failed to remove temporary directory %s", path)
-		}
-	}
-
-	tmpDirs = make([]string, 0)
-}
 
 // CreateZip creates a ZIP file for testing purposes.
 func CreateZip(filename string, files []TestFile) error {

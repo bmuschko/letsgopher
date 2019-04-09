@@ -3,6 +3,7 @@ package download
 import (
 	"bytes"
 	"errors"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
 	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
@@ -14,8 +15,8 @@ import (
 )
 
 func TestDownloadSuccessfully(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	zipFile := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	files := []testhelper.TestFile{
@@ -53,8 +54,8 @@ func TestDownloadSuccessfully(t *testing.T) {
 }
 
 func TestDownloadFailed(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	gM := new(GetterMock)
 	downloader := &TemplateDownloader{Getter: gM, Home: storage.Home(tmpHome)}

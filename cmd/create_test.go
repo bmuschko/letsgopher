@@ -3,16 +3,16 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
-	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
 )
 
 func TestCreateProjectWithoutRegisteredTemplate(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
@@ -35,8 +35,8 @@ templates: []`), 0644)
 }
 
 func TestCreateProjectWithRegisteredTemplate(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
@@ -69,8 +69,8 @@ templates:
 }
 
 func TestCreateProjectWithRegisteredTemplateAndDefinedParams(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
@@ -114,8 +114,8 @@ parameters:
 }
 
 func TestCreateProjectWithRegisteredTemplateAndNonMatchingEnumParams(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
@@ -156,8 +156,8 @@ parameters:
 }
 
 func TestCreateProjectWithRegisteredTemplateAndMatchingEnumParams(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"
@@ -198,8 +198,8 @@ parameters:
 }
 
 func TestCreateProjectWithMisformedUserDefinedParams(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
 	archiveZip := storage.Home(tmpHome).ArchiveDir() + "/hello-world-1.0.0.zip"

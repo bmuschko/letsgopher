@@ -2,16 +2,16 @@ package cmd
 
 import (
 	"bytes"
+	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
-	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 )
 
 func TestNonExistentTemplateFile(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
@@ -25,8 +25,8 @@ func TestNonExistentTemplateFile(t *testing.T) {
 }
 
 func TestEmptyTemplateList(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
@@ -51,8 +51,8 @@ templates: []`)
 }
 
 func TestPopulatedTemplateList(t *testing.T) {
-	tmpHome := testhelper.TmpDir(t, "", "test")
-	defer testhelper.CleanTmpDirs(t)
+	tmpHome := filet.TmpDir(t, "")
+	defer filet.CleanUp(t)
 
 	b := bytes.NewBuffer(nil)
 	templateList := &templateListCmd{
