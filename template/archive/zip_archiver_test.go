@@ -1,7 +1,7 @@
 package archive
 
 import (
-	"github.com/bmuschko/lets-gopher/testhelper"
+	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"

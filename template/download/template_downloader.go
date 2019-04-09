@@ -1,7 +1,7 @@
 package download
 
 import (
-	"github.com/bmuschko/lets-gopher/template/storage"
+	"github.com/bmuschko/letsgopher/template/storage"
 	"io/ioutil"
 	"path/filepath"
 	"strings"

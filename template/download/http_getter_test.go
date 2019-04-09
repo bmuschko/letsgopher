@@ -1,7 +1,7 @@
 package download
 
 import (
-	"github.com/bmuschko/lets-gopher/testhelper"
+	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"

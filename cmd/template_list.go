@@ -3,9 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/bmuschko/lets-gopher/template/config"
-	"github.com/bmuschko/lets-gopher/template/environment"
-	"github.com/bmuschko/lets-gopher/template/storage"
+	"github.com/bmuschko/letsgopher/template/config"
+	"github.com/bmuschko/letsgopher/template/environment"
+	"github.com/bmuschko/letsgopher/template/storage"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 	"io"

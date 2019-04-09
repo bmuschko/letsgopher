@@ -1,6 +1,6 @@
 package prompt
 
-import "github.com/bmuschko/lets-gopher/template/config"
+import "github.com/bmuschko/letsgopher/template/config"
 
 // Prompter ask for user input for a given list of parameters.
 type Prompter interface {

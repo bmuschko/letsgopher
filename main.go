@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/bmuschko/lets-gopher/cmd"
-	"github.com/bmuschko/lets-gopher/template/download"
+	"github.com/bmuschko/letsgopher/cmd"
+	"github.com/bmuschko/letsgopher/template/download"
 	"os"
 )
 
