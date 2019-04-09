@@ -7,7 +7,7 @@ import (
 )
 
 func TestRootCmd(t *testing.T) {
-	args := []string{}
+	args := make([]string, 0)
 	cmd := NewRootCmd(args)
 	cmd.SetOutput(ioutil.Discard)
 	cmd.SetArgs(args)
