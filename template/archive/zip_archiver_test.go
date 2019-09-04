@@ -15,9 +15,9 @@ func TestExtractWithoutTemplateReplacement(t *testing.T) {
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
 	files := []testhelper.TestFile{
-		{manifestFile, "version: \"1.0.0\""},
-		{"file1.txt", "This is a file1"},
-		{"file2.txt", "This is a file2"},
+		{Name: manifestFile, Content: "version: \"1.0.0\""},
+		{Name: "file1.txt", Content: "This is a file1"},
+		{Name: "file2.txt", Content: "This is a file2"},
 	}
 	err := testhelper.CreateZip(archive, files)
 	if err != nil {
@@ -56,9 +56,9 @@ func TestExtractWithTemplateReplacement(t *testing.T) {
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
 	files := []testhelper.TestFile{
-		{manifestFile, "version: \"1.0.0\""},
-		{"file1.txt", "This is a {( .a }}"},
-		{"file2.txt", "This is a {{ .b }}"},
+		{Name: manifestFile, Content: "version: \"1.0.0\""},
+		{Name: "file1.txt", Content: "This is a {( .a }}"},
+		{Name: "file2.txt", Content: "This is a {{ .b }}"},
 	}
 	err := testhelper.CreateZip(archive, files)
 	if err != nil {
@@ -98,7 +98,7 @@ func TestLoadExistingManifestFile(t *testing.T) {
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
 	files := []testhelper.TestFile{
-		{manifestFile, "version: \"1.0.0\""},
+		{Name: manifestFile, Content: "version: \"1.0.0\""},
 	}
 	err := testhelper.CreateZip(archive, files)
 	if err != nil {
@@ -117,8 +117,8 @@ func TestLoadNonExistentManifestFile(t *testing.T) {
 	archive := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	archiver := ZIPArchiver{Processor: &TemplateProcessor{}}
 	files := []testhelper.TestFile{
-		{"file1.txt", "This is a {( .a }}"},
-		{"file2.txt", "This is a {{ .b }}"},
+		{Name: "file1.txt", Content: "This is a {( .a }}"},
+		{Name: "file2.txt", Content: "This is a {{ .b }}"},
 	}
 	err := testhelper.CreateZip(archive, files)
 	if err != nil {

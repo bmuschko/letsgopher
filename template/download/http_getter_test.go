@@ -18,8 +18,8 @@ func TestGetForZipFile(t *testing.T) {
 
 	zipFile := filepath.Join(tmpHome, "hello-world-1.0.0.zip")
 	files := []testhelper.TestFile{
-		{"file1.txt", "This is a file1"},
-		{"file2.txt", "This is a file2"},
+		{Name: "file1.txt", Content: "This is a file1"},
+		{Name: "file2.txt", Content: "This is a file2"},
 	}
 	err := testhelper.CreateZip(zipFile, files)
 	if err != nil {
