@@ -23,16 +23,13 @@ func TestDownloadSuccessfully(t *testing.T) {
 		{Name: "file1.txt", Content: "This is a file1"},
 		{Name: "file2.txt", Content: "This is a file2"},
 	}
-	err := testhelper.CreateZip(zipFile, files)
-	if err != nil {
-		t.Errorf("failed to create file %s", zipFile)
-	}
+	testhelper.CreateZip(t, zipFile, files)
 
 	gM := new(GetterMock)
 	downloader := &TemplateDownloader{Getter: gM, Home: storage.Home(tmpHome)}
 	url := "https://dl.dropboxusercontent.com/s/002j89do6epotqs/hello-world-1.0.0.zip"
 	targetDir := storage.Home(tmpHome).ArchiveDir()
-	err = os.MkdirAll(targetDir, os.ModePerm)
+	err := os.MkdirAll(targetDir, os.ModePerm)
 	if err != nil {
 		t.Errorf("failed to create directory %s", targetDir)
 	}

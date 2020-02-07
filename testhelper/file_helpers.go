@@ -3,15 +3,15 @@ package testhelper
 import (
 	"archive/zip"
 	"io/ioutil"
-	"log"
 	"os"
+	"testing"
 )
 
 // CreateZip creates a ZIP file for testing purposes.
-func CreateZip(filename string, files []TestFile) error {
+func CreateZip(t *testing.T, filename string, files []TestFile) {
 	outFile, err := os.Create(filename)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatalf("Failed to create file %s. Reason: %s", filename, err)
 	}
 	defer outFile.Close()
 
@@ -20,22 +20,21 @@ func CreateZip(filename string, files []TestFile) error {
 	for _, file := range files {
 		f, err := w.Create(file.Name)
 		if err != nil {
-			return err
+			t.Fatalf("Failed to create file %s. Reason: %s", file.Name, err)
 		}
 		_, err = f.Write([]byte(file.Content))
 		if err != nil {
-			return err
+			t.Fatalf("Failed to write to file %s. Reason: %s", file.Name, err)
 		}
 	}
 
 	err = w.Close()
 	if err != nil {
-		return err
+		t.Fatalf("Failed to close file %s. Reason: %s", outFile.Name(), err)
 	}
 	for _, f := range files {
 		os.Remove(f.Name)
 	}
-	return nil
 }
 
 // TestFile is a text file for bundling with a ZIP file.
@@ -45,10 +44,10 @@ type TestFile struct {
 }
 
 // ReadFile reads the textual content of a file.
-func ReadFile(file string) (string, error) {
+func ReadFile(t *testing.T, file string) string {
 	b, err := ioutil.ReadFile(file)
 	if err != nil {
-		return "", err
+		t.Fatalf("Failed to read file %s. Reason: %s", file, err)
 	}
-	return string(b), nil
+	return string(b)
 }

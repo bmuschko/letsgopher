@@ -21,10 +21,7 @@ func TestGetForZipFile(t *testing.T) {
 		{Name: "file1.txt", Content: "This is a file1"},
 		{Name: "file2.txt", Content: "This is a file2"},
 	}
-	err := testhelper.CreateZip(zipFile, files)
-	if err != nil {
-		t.Errorf("failed to load file %s", zipFile)
-	}
+	testhelper.CreateZip(t, zipFile, files)
 
 	h := &TestFileHandler{zipFile: zipFile}
 	server := httptest.NewServer(h)
