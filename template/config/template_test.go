@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/Flaque/filet"
 	"github.com/bmuschko/letsgopher/template/storage"
+	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"path/filepath"
@@ -165,17 +166,14 @@ func TestReadTemplateFile(t *testing.T) {
 	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
+	testhelper.WriteFile(t, f, `generated: "2019-03-21T08:49:27.10175-06:00"
 templates:
   - archivePath: /my/path/archive/hello-world-1.0.0.zip
     name: hello-world
     version: 1.0.0
   - archivePath: /my/path/archive/web-project-2.4.1.zip
     name: web-project
-    version: 2.4.1`), 0644)
-	if err != nil {
-		t.Error("could not write template file")
-	}
+    version: 2.4.1`, 0644)
 	templatesFile, err := LoadTemplatesFile(f)
 	if err != nil {
 		t.Error("could not load template file")

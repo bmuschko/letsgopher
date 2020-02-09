@@ -8,7 +8,6 @@ import (
 	"github.com/bmuschko/letsgopher/testhelper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"io/ioutil"
 	"testing"
 )
 
@@ -17,11 +16,8 @@ func TestInstallNewTemplate(t *testing.T) {
 	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
-templates: []`), 0644)
-	if err != nil {
-		t.Error("could not write template file")
-	}
+	testhelper.WriteFile(t, f, `generated: "2019-03-21T08:49:27.10175-06:00"
+templates: []`, 0644)
 
 	b := bytes.NewBuffer(nil)
 	dM := new(DownloaderMock)
@@ -33,7 +29,7 @@ templates: []`), 0644)
 		downloader:   dM,
 	}
 	dM.On("Download", "http://my.repo.com/hello-world-1.0.0.zip").Return("/my/path/new-project/hello-world-1.0.0.zip", nil)
-	err = templateInstall.run()
+	err := templateInstall.run()
 
 	templates := testhelper.ReadFile(t, f)
 
@@ -53,15 +49,12 @@ func TestInstallExistingTemplate(t *testing.T) {
 	defer filet.CleanUp(t)
 
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
+	testhelper.WriteFile(t, f, `generated: "2019-03-21T08:49:27.10175-06:00"
 templates:
 - archivePath: /my/path/new-project/hello-world-1.0.0.zip
   name: new-project
   version: 1.0.0
-`), 0644)
-	if err != nil {
-		t.Error("could not write template file")
-	}
+`, 0644)
 
 	b := bytes.NewBuffer(nil)
 	dM := new(DownloaderMock)
@@ -73,7 +66,7 @@ templates:
 		downloader:   dM,
 	}
 	dM.On("Download", "http://my.repo.com/hello-world-1.0.0.zip").Return("/my/path/new-project/hello-world-1.0.0.zip", nil)
-	err = templateInstall.run()
+	err := templateInstall.run()
 
 	dM.AssertExpectations(t)
 	assert.NotNil(t, err)
@@ -84,13 +77,10 @@ func TestInstallForFailedTemplateDownload(t *testing.T) {
 	tmpHome := filet.TmpDir(t, "")
 	defer filet.CleanUp(t)
 
-	templatesContent := []byte(`generated: "2019-03-21T08:49:27.10175-06:00"
-templates: []`)
+	templatesContent := `generated: "2019-03-21T08:49:27.10175-06:00"
+templates: []`
 	f := storage.Home(tmpHome).TemplatesFile()
-	err := ioutil.WriteFile(f, templatesContent, 0644)
-	if err != nil {
-		t.Error("could not write template file")
-	}
+	testhelper.WriteFile(t, f, templatesContent, 0644)
 
 	b := bytes.NewBuffer(nil)
 	dM := new(DownloaderMock)
@@ -102,7 +92,7 @@ templates: []`)
 		downloader:   dM,
 	}
 	dM.On("Download", "http://my.repo.com/hello-world-1.0.0.zip").Return("", errors.New("expected"))
-	err = templateInstall.run()
+	err := templateInstall.run()
 
 	dM.AssertExpectations(t)
 	assert.NotNil(t, err)

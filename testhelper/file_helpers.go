@@ -51,3 +51,11 @@ func ReadFile(t *testing.T, file string) string {
 	}
 	return string(b)
 }
+
+// WriteFile writes the textual content of a file.
+func WriteFile(t *testing.T, file string, content string, perm os.FileMode) {
+	err := ioutil.WriteFile(file, []byte(content), perm)
+	if err != nil {
+		t.Fatalf("Failed to write file %s. Reason: %s", file, err)
+	}
+}
